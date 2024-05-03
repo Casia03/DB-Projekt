@@ -8,7 +8,7 @@ describe('FilmComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FilmComponent]
+      declarations: [FilmComponent]
     })
     .compileComponents();
     
