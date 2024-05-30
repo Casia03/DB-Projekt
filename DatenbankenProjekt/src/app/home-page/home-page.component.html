@@ -1,28 +1,52 @@
 <div class="container">
-    <header>
-        <h1>Wilkommen zu CineScoreHub</h1>
-        <p>Die Filmbewertungsseite</p>
-    </header>
-
-    <main>
-        <section class="featured-movies">
-            <h2>Herrausragende Filme</h2>
-            <!--Hier Filme anzeigen die herrausragend sind-->
-            <div class="movie-card">
-                <img src="movie1.jpg" alt="Movie 1">
-                <h3>Film 1</h3>
-                <p>Bewertung: </p>
+    <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
+        <!-- Button zum Ausfahren der Sidebar -->
+        <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- Navigation der Sidebar -->
+        <nav>
+            <ul>
+                <li class="home"><a>Home</a></li>
+                <li><a routerLink="/register">Registrieren</a></li>
+                <li><a routerLink="/login">Einloggen</a></li>
+                <li><a routerLink="/film-list">Film Liste</a></li>
+                <li><a routerLink="/film">Filme</a></li>
+            </ul>
+        </nav>      
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <button class="sidebar-toggle" (click)="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="header-text">
+                <h1>Willkommen zu CineScoreHub</h1>
+                <p>Die Filmbewertungsseite</p>
             </div>
-            <!-- Weiter Filmkarten hier einfügen-->
-        </section>
+        </header>
 
-        <section class="about-us">
-            <h2>Über uns</h2>
-            <p>CineScoreHub lässt dich Filme bewerten.</p>
-        </section>
-    </main>
+        <main>
+            <section class="featured-movies">
+                <h2>Hervorragende Filme</h2>
+                <!-- Hier Filme anzeigen, die hervorragend sind -->
+                <!-- Beispiel: <div class="movie-card"> ... </div> -->
+            </section>
 
-    <footer>
-        <p>&copy; 2024 CineScoreHub. All rights reserved</p>
-    </footer>
+            <section class="about-us">
+                <h2>Über uns</h2>
+                <p>CineScoreHub ermöglicht es Ihnen, Filme zu bewerten.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 CineScoreHub. Alle Rechte vorbehalten.</p>
+        </footer>
+    </div>
 </div>

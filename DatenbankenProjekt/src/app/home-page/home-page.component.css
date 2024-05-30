@@ -1,45 +1,156 @@
+/* Allgemeine Stile */
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
+    display: flex;
+    position: relative; /* Positionierung relativ für die Sidebar */
+    z-index: 100;
+    color: #fff;
+}
+
+/* Sidebar-Stile */
+.sidebar {
+    width: 250px;
+    top: 20px;
+    height: calc(100vh - 50px); /* Verwenden Sie 100vh für die Höhe der Sidebar */
+    background-color: #333;
+    position: fixed; /* Ändern Sie die Position auf fixed */
+    left: 0;
+    z-index: 1000;
+    transition: transform 0.4s ease;
+    transform: translateX(-100%);
+}
+
+.sidebar.open {
+    transform: translateX(-3.5%);
+}
+
+.sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    padding: 10px 20px;
+    border-bottom: 1px solid #555;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar nav ul li:hover {
+    background-color: rgba(255, 255, 255, 0.233);
+}
+
+.sidebar nav ul li.home a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.sidebar nav ul li.home:hover {
+    background-color: transparent;
+}
+
+/* Stil für den Pfeil */
+.sidebar-toggle-arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+    width: 30px;
+    height: 15px; 
+}
+
+.sidebar-toggle-arrow span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #ffffff;
+    margin: 5px 0;
+}
+
+/* Sidebar-Toggle-Stile */
+.sidebar-toggle {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.sidebar-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #ffffff;
+    margin: 5px 0;
+}
+
+.sidebar-close {
+    position: absolute;
+    right: 10px; /* Abstand zum rechten Rand der Sidebar */
+    top: 50%; /* Zentrieren vertikal */
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Header-Stile */
+.header-text {
+    text-align: center;
 }
 
 header {
-    text-align: center;
-    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px; /* Größerer Innenabstand für den Header */
+    background: linear-gradient(to bottom, #000000, #6e6e6e); /* Gradient von Blau nach Lila */
+    color: #fff; /* Textfarbe auf Weiß */
 }
 
-h1{
-    font-size: 36px;
-    margin-top: 10px;
+h1 {
+    font-size: 24px;
+    margin: 0;
 }
 
-p{
+h2 {
     font-size: 18px;
+    margin: 10px 0 0;
 }
 
-.featured-movies{
-    margin-bottom: 40px;
-}
-
-.movie-card{
-    border: 1px solid #ddd;
-    border-radius: 5px;
+/* Hauptinhalt-Stile */
+main {
     padding: 20px;
-    margin-bottom: 20px;
 }
 
-.movie-card h3{
-    margin-top: 10px;
+.main-content {
+    flex: 1;
+    padding: 20px;
 }
 
+/* Footer-Stile */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(to bottom, #6e6e6e, #000000); /* Gradient von Blau nach Lila */
+    color: #fff; /* Textfarbe auf Weiß */
+}
+
+/* Über uns-Stile */
 .about-us {
+    text-align: center;
     border-top: 1px solid #ddd;
     padding-top: 20px;
-}
-
-footer{
-    text-align: center;
-    margin-top: 40px;
 }
