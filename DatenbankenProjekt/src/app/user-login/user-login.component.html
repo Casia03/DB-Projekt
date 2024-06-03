@@ -1,31 +1,28 @@
-<p>user-login works!</p>
 <div class="login-container">
     <h2>Login</h2>
     <div class="form-group">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required [(ngModel)]="loginObj.username">>
+        <input type="username" id="username" name="username" [(ngModel)]="loginObj.username">>
     </div>
     <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required [(ngModel)]="loginObj.password">
+        <input type="password" id="password" name="password" [(ngModel)]="loginObj.password">
     </div>
-    <div class="form-group">
-        <button (click)="onLogin()" >Login</button>
-    </div>
+    <button (click)="onLogin()" >Login</button>
 </div>
   
 <div class="register-container">
     <h2>Register</h2>
   
       <label for="username">Username:</label>
-      <input type="text" id="username" formControlName="username" [(ngModel)]="signupObj.username">
+      <input type="username" id="username" [(ngModel)]="signupObj.username">
   
-      <label for="password">Email:</label>
-      <input type="email" id="password" formControlName="email" [(ngModel)]="signupObj.email">
+      <label for="email">Email:</label>
+      <input type="email" id="password" [(ngModel)]="signupObj.email">
   
       <label for="password">Password:</label>
-      <input type="password" id="password" formControlName="password" [(ngModel)]="signupObj.password">
+      <input type="password" id="password" [(ngModel)]="signupObj.password">
   
-      <button (click)="onSignUp()" >Register</button>
+      <button (click)="onSignUp()">Register</button>
   </div>
   

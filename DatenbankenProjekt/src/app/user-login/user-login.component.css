@@ -1,20 +1,28 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  
-.register-container {
-    max-width: 400px;
+.login-container{
+    
+    position: relative;
+    color: #e19f12;
+    max-width: 500px;
+    margin: 0 10% 10% 30%;
     padding: 1em;
     border: 1px solid #ccc;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
     background-color: #fff;
+    z-index: 10;
+}
+
+.register-container {
+    position: relative;
+    color: #e19f12;
+    max-width: 500px;
+    margin: 10% 10% 10% 30%;
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    background-color: #fff;
+    z-index: 10;
 }
 
 h2 {
@@ -31,10 +39,10 @@ label {
     margin-bottom: 0.5em;
 }
 
-input[type="text"],
+input[type="username"],
 input[type="email"],
 input[type="password"] {
-    width: 100%;
+    width: 90%;
     padding: 0.5em;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -42,8 +50,9 @@ input[type="password"] {
 
 button {
     width: 100%;
-    padding: 0.5em;
-    background-color: #4CAF50;
+    padding: .5em;
+    margin: .5em;
+    background-color: #e19f12;
     color: white;
     border: none;
     border-radius: 5px;
@@ -51,5 +60,6 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #000000;
 }
+

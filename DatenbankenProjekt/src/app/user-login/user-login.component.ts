@@ -25,6 +25,7 @@ export class UserLoginComponent {
   }
 
   onSignUp(){
+    console.log("User " + this.signupObj + " Succesfully signed up")
     this.signupUsers.push(this.signupObj)
     localStorage.setItem('signUpUsers', JSON.stringify(this.signupUsers))
     this.signupObj = {
@@ -33,6 +34,7 @@ export class UserLoginComponent {
       password: ''
     };
   }
+
 
   onLogin(){
 
