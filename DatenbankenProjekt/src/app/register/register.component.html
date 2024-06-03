@@ -1,26 +1,16 @@
-<!-- register.component.html -->
 <div class="register-container">
-    <h2>Register</h2>
-    <form (ngSubmit)="onSubmit()" [formGroup]="registerForm">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" formControlName="username" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" formControlName="email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" formControlName="password" required>
-      </div>
-      <div class="form-group">
-        <label for="confirm-password">Confirm Password:</label>
-        <input type="password" id="confirm-password" formControlName="confirmPassword" required>
-      </div>
-      <div class="form-group">
-        <button type="submit">Register</button>
-      </div>
-    </form>
-  </div>
-  
+  <h2>Register</h2>
+  <form (ngSubmit)="onSubmit()" [formGroup]="registerForm">
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" formControlName="username" [(ngModel)]="signupObj.username">
+
+    <label for="password">Email:</label>
+    <input type="email" id="password" formControlName="email" [(ngModel)]="signupObj.email">
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" formControlName="password" [(ngModel)]="signupObj.password">
+
+    <button (click)="onSignUp()" type="submit">Register</button>
+  </form>
+</div>

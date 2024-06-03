@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'app-user-login',
+  templateUrl: './user-login.component.html',
+  styleUrls: ['./user-login.component.css']
 })
-export class RegisterComponent {
+
+export class UserLoginComponent {
 
   signupUsers: any[] = [];
   signupObj: any = {
@@ -15,13 +16,20 @@ export class RegisterComponent {
     password: ''
   };
 
-  constructor() {
-  }
+  loginObj: any = {
+    username: '',
+    password: ''
+  };
 
-  onSubmit() {
+  constructor() {
   }
 
   onSignUp(){
 
   }
+
+  onLogin(){
+
+  }
+
 }
