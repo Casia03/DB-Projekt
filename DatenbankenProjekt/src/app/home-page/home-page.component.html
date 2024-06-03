@@ -33,9 +33,17 @@
 
         <main>
             <section class="featured-movies">
-                <h2>Hervorragende Filme</h2>
+                <h2>Hervorragende Filmlisten</h2>
                 <!-- Hier Filme anzeigen, die hervorragend sind -->
-                <!-- Beispiel: <div class="movie-card"> ... </div> -->
+                <div class="movie-card-container" [ngClass]="slideDirection">
+                    <div class="movie-card" *ngFor="let movie of displayedMovies">
+                        <p>{{movie.title }}</p>
+                    </div>
+                </div>
+                <div class="pagination-buttons">
+                    <button id="previousButton" (click)="previousPage();">Zurück</button>
+                    <button id="nextButton" (click)="nextPage();">Weiter</button>
+                </div>
             </section>
 
             <section class="about-us">

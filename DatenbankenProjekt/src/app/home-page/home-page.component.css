@@ -64,8 +64,11 @@
     border: none;
     cursor: pointer;
     z-index: 999;
-    width: 30px;
-    height: 15px; 
+}
+
+.sidebar-toggle-arrow:hover {
+    background-color: rgba(255, 255, 255, 0.233);
+    transition: background-color 0.3s ease;
 }
 
 .sidebar-toggle-arrow span {
@@ -84,6 +87,11 @@
     background: none;
     border: none;
     cursor: pointer;
+}
+
+.sidebar-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.233);
+    transition: background-color 0.3s ease;
 }
 
 .sidebar-toggle span {
@@ -118,6 +126,7 @@ header {
     padding: 30px 20px; /* Größerer Innenabstand für den Header */
     background: linear-gradient(to bottom, #000000, #6e6e6e); /* Gradient von Blau nach Lila */
     color: #fff; /* Textfarbe auf Weiß */
+    border-radius: 5px;
 }
 
 h1 {
@@ -140,12 +149,75 @@ main {
     padding: 20px;
 }
 
+.movie-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.movie-card {
+    width: 10%;
+    padding: 20px;
+    background: #444;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.pagination-buttons{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pagination-buttons button {
+    background: #444;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.pagination-buttons button:hover {
+    background-color: rgb(88, 88, 88);
+    transition: background-color 0.3s ease;
+}
+
+/* Slide Animation*/
+.slide-left {
+    animation: slideLeft 0.4s forwards;
+}
+
+.slide-right {
+    animation: slideRight 0.4s forwards;
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideRight {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
 /* Footer-Stile */
 footer {
     text-align: center;
     padding: 20px;
     background: linear-gradient(to bottom, #6e6e6e, #000000); /* Gradient von Blau nach Lila */
     color: #fff; /* Textfarbe auf Weiß */
+    border-radius: 5px;
 }
 
 /* Über uns-Stile */
