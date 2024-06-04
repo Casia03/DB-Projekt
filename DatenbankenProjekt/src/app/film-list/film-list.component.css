@@ -44,13 +44,13 @@
             background-color: rgba(255, 255, 255, 0.233);
         }
         
-        .sidebar nav ul li.home a {
+        .sidebar nav ul li.film-liste a {
             color: #ffffff;
             font-weight: bold;
             text-decoration: underline;
         }
         
-        .sidebar nav ul li.home:hover {
+        .sidebar nav ul li.film-liste:hover {
             background-color: transparent;
         }
         
@@ -114,7 +114,7 @@
         }   
         
         .main-list {
-            background: white;
+            background: #222;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -131,7 +131,7 @@
         }
         .side-list {
             flex: 0 0 25%;
-            background: #f9f9f9;
+            background: #777;
             border-radius: 8px;
             padding: 10px;
         }
@@ -161,4 +161,4 @@
             margin: 0;
             color: #666;
         }
-  
+        
