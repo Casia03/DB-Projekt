@@ -1,4 +1,4 @@
-<div class= "container">
+<div class="container">
     <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
         <!-- Button zum Ausfahren der Sidebar -->
         <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
@@ -15,40 +15,49 @@
                 <li><a routerLink="/film">Filme</a></li>
             </ul>
         </nav>      
-    </div>  
-            <div class="main-list">
-                <div class="main-list-container">
-                    <div class="main-list-items">
-                        <div class="list-item">
-                            <img src="bild1.jpg" alt="Bild 1">
-                            <div class="item-info">
-                                <h3>Name 1</h3>
-                                <p>Beschreibung 1</p>
-                            </div>
-                        </div>
-                        <div class="list-item">
-                            <img src="bild2.jpg" alt="Bild 2">
-                            <div class="item-info">
-                                <h3>Name 2</h3>
-                                <p>Beschreibung 2</p>
-                            </div>
-                        </div>
-                        <div class="list-item">
-                            <img src="bild3.jpg" alt="Bild 3">
-                            <div class="item-info">
-                                <h3>Name 3</h3>
-                                <p>Beschreibung 3</p>
-                            </div>
-                        </div>
+    </div>
+
+    <header>
+        <button class="sidebar-toggle" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <div class="main-list">
+        <div class="main-list-container">
+            <div class="main-list-items">
+                <div class="list-item">
+                    <img src="bild1.jpg" alt="Bild 1">
+                    <div class="item-info">
+                        <h3>Name 1</h3>
+                        <p>Beschreibung 1</p>
                     </div>
-                    <div class="side-list">
-                        <h3>Nebenliste</h3>
-                        <ul>
-                            <li>Eintrag 1</li>
-                            <li>Eintrag 2</li>
-                            <li>Eintrag 3</li>
-                        </ul>
+                </div>
+                <div class="list-item">
+                    <img src="bild2.jpg" alt="Bild 2">
+                    <div class="item-info">
+                        <h3>Name 2</h3>
+                        <p>Beschreibung 2</p>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <img src="bild3.jpg" alt="Bild 3">
+                    <div class="item-info">
+                        <h3>Name 3</h3>
+                        <p>Beschreibung 3</p>
                     </div>
                 </div>
             </div>
+            <div class="side-list">
+                <h3>Nebenliste</h3>
+                <ul>
+                    <li>Eintrag 1</li>
+                    <li>Eintrag 2</li>
+                    <li>Eintrag 3</li>
+                </ul>
+            </div>
         </div>
+    </div>
+</div>
