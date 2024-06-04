@@ -5,6 +5,13 @@ import { Component } from '@angular/core';
   templateUrl: './film-list.component.html',
   styleUrl: './film-list.component.css'
 })
-export class FilmListComponent {
 
+
+
+export class FilmListComponent {
+  isSidebarOpen = false; // Initialer Zustand der Sidebar
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 }

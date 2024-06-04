@@ -1,0 +1,164 @@
+        .container {
+            display: flex;
+            position: relative;
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            
+        }
+        .sidebar {
+            width: 250px;
+            top: 20px;
+            height: calc(100vh - 50px); /* Verwenden Sie 100vh für die Höhe der Sidebar */
+            background-color: #333;
+            position: fixed; /* Ändern Sie die Position auf fixed */
+            left: 0;
+            z-index: 1000;
+            transition: transform 0.4s ease;
+            transform: translateX(-100%);
+        }
+        
+        .sidebar.open {
+            transform: translateX(-3.5%);
+        }
+        
+        .sidebar nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .sidebar nav ul li {
+            padding: 10px 20px;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s ease;
+        }
+        
+        .sidebar nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .sidebar nav ul li:hover {
+            background-color: rgba(255, 255, 255, 0.233);
+        }
+        
+        .sidebar nav ul li.home a {
+            color: #ffffff;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        
+        .sidebar nav ul li.home:hover {
+            background-color: transparent;
+        }
+        
+        /* Stil für den Pfeil */
+        .sidebar-toggle-arrow {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 999;
+        }
+        
+        .sidebar-toggle-arrow:hover {
+            background-color: rgba(255, 255, 255, 0.233);
+            transition: background-color 0.3s ease;
+        }
+        
+        .sidebar-toggle-arrow span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #ffffff;
+            margin: 5px 0;
+        }
+        
+        /* Sidebar-Toggle-Stile */
+        .sidebar-toggle {
+            position: absolute;
+            left: 30px;
+            top: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .sidebar-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.233);
+            transition: background-color 0.3s ease;
+        }
+        
+        .sidebar-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #ffffff;
+            margin: 5px 0;
+        }
+        
+        .sidebar-close {
+            position: absolute;
+            right: 10px; /* Abstand zum rechten Rand der Sidebar */
+            top: 50%; /* Zentrieren vertikal */
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }   
+        
+        .main-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .main-list-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .main-list-items {
+            flex: 0 0 70%;
+        }
+        .side-list {
+            flex: 0 0 25%;
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .list-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .list-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+        .list-item:last-child {
+            margin-bottom: 0;
+        }
+        .item-info {
+            flex-grow: 1;
+        }
+        .item-info h3 {
+            margin: 0 0 10px;
+            font-size: 1.2em;
+        }
+        .item-info p {
+            margin: 0;
+            color: #666;
+        }
+  
