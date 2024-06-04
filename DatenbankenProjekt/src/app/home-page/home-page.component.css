@@ -124,7 +124,7 @@ header {
     align-items: center;
     justify-content: center;
     padding: 30px 20px; /* Größerer Innenabstand für den Header */
-    background: linear-gradient(to bottom, #000000, #6e6e6e); /* Gradient von Blau nach Lila */
+    background: linear-gradient(to bottom, #000000, #444); /* Gradient von Blau nach Lila */
     color: #fff; /* Textfarbe auf Weiß */
     border-radius: 5px;
 }
@@ -215,7 +215,7 @@ main {
 footer {
     text-align: center;
     padding: 20px;
-    background: linear-gradient(to bottom, #6e6e6e, #000000); /* Gradient von Blau nach Lila */
+    background: linear-gradient(to bottom, #444, #000000); /* Gradient von Blau nach Lila */
     color: #fff; /* Textfarbe auf Weiß */
     border-radius: 5px;
 }
