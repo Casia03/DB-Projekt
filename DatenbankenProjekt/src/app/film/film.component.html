@@ -1,1 +1,38 @@
-<p>film works!</p>
+<div class="container">
+    <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
+        <button class="sidebar-toggle" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a routerLink="/home-page">Home</a></li>
+                <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
+                <li class="film-liste"><a>Film Liste</a></li>
+                <li><a routerLink="/film">Filme</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="main-list">
+        <div class="main-list-container">
+            <div class="main-list-items">
+                <div class="list-item">
+                    <img src="film1.jpg" alt="Film 1">
+                    <div class="item-info">
+                        <h3>Film Name 1</h3>
+                        <div class="item-tags">
+                            <span>Tag 1</span>
+                            <span>Tag 2</span>
+                            <span>Tag 3</span>
+                        </div>
+                        <p>Beschreibung 1</p>
+                    </div>
+                </div>        
+            </div>
+         </div>
+    </div>
+</div>
+
+
