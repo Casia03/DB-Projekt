@@ -1,28 +1,40 @@
-<div class="login-container">
-    <h2>Login</h2>
-    <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="username" id="username" name="username" [(ngModel)]="loginObj.username">>
+<div class="form-container">
+    <!-- Login Form -->
+    <div *ngIf="showLoginForm" class="login-container">
+      <h2>Login</h2>
+      <div class="form-group">
+        <label for="login-username">Username:</label>
+        <input type="text" id="login-username" name="username" [(ngModel)]="loginObj.username">
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password:</label>
+        <input type="password" id="login-password" name="password" [(ngModel)]="loginObj.password">
+      </div>
+      <div class="button-group">
+        <button class="toggle-button" (click)="toggleForm()">Go to Register</button>
+        <button (click)="onLogin()">Login</button>
+      </div>
     </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" [(ngModel)]="loginObj.password">
+  
+    <!-- Register Form -->
+    <div *ngIf="!showLoginForm" class="register-container">
+      <h2>Register</h2>
+      <div class="form-group">
+        <label for="register-username">Username:</label>
+        <input type="text" id="register-username" [(ngModel)]="signupObj.username">
+      </div>
+      <div class="form-group">
+        <label for="register-email">Email:</label>
+        <input type="email" id="register-email" [(ngModel)]="signupObj.email">
+      </div>
+      <div class="form-group">
+        <label for="register-password">Password:</label>
+        <input type="password" id="register-password" [(ngModel)]="signupObj.password">
+      </div>
+      <div class="button-group">
+        <button class="toggle-button" (click)="toggleForm()">Go to Login</button>
+        <button (click)="onSignUp()">Register</button>
+      </div>
     </div>
-    <button (click)="onLogin()" >Login</button>
-</div>
-  
-<div class="register-container">
-    <h2>Register</h2>
-  
-      <label for="username">Username:</label>
-      <input type="username" id="username" [(ngModel)]="signupObj.username">
-  
-      <label for="email">Email:</label>
-      <input type="email" id="password" [(ngModel)]="signupObj.email">
-  
-      <label for="password">Password:</label>
-      <input type="password" id="password" [(ngModel)]="signupObj.password">
-  
-      <button (click)="onSignUp()">Register</button>
   </div>
   
