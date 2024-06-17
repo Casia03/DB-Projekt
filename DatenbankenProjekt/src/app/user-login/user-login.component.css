@@ -1,11 +1,8 @@
-body{
-    margin: auto;
-}
 
 .form-container {
     position: relative;
     max-width: 500px;
-    margin: 0 auto;
+    margin: auto;
     padding: 1em;
     border: 1px solid #ccc;
     border-radius: 10px;
