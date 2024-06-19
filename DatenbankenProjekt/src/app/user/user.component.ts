@@ -1,13 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrl: './user.component.css'
+  styleUrls: ['./user.component.css']
 })
-export class UserComponent {
-  
+export class UserComponent implements OnInit {
+  user: any;
 
-
-  constructor() {}
+  ngOnInit() {
+    // Beispielhafte User-Daten, diese sollten normalerweise von einem Service geladen werden
+    this.user = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      joinDate: new Date('2023-01-01'),
+      ratedMovies: [
+        { title: 'Inception', rating: 9 },
+        { title: 'Interstellar', rating: 8 }
+      ]
+    };
+  }
 }
