@@ -2,7 +2,7 @@
 var express  = require('express'); 
 var app      = express();                               // create our app w/ express 
 var path     = require('path'); 
-var mysql    = require('mysql'); 
+var mysql    = require('mysql2');
  
 bodyParser = require('body-parser');
 
@@ -28,3 +28,24 @@ app.get('/', function(req,res)
       res.sendFile('index.html', { root: __dirname+'/dist/datenbanken-projekt/browser' });    //TODO rename to your app-name
 });
 
+app.get('/film', function(req,res) {
+      const con = mysql.createConnection({
+            database: "sakila",
+            host: "localhost",
+            user: "root",
+            password: "passwort"
+      }) ;
+
+      con.connect(function(err) {
+            if(err) throw err;
+            con.query("SELECT * FROM film WHERE image_nr=14", function(err, results) {
+                  if(err) throw err;
+                  console.log(results);
+                  res.send(results);
+                  con.end(function(err) {
+                        if(err) throw err;
+                        console.log("Disconnected");
+                  });
+            })
+      })
+});
