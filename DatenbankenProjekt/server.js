@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
  // configuration =================
-app.use(express.static(path.join(__dirname, '/dist/datenbanken-projekt/browser')));  //TODO rename to your app-name
+app.use(express.static(path.join(__dirname, '/dist/datenbanken-projekt/browser')));  
  
  // listen (start app with node server.js) ======================================
 app.listen(8080, function(){    
@@ -25,10 +25,16 @@ app.listen(8080, function(){
 app.get('/', function(req,res) 
 {     
       //res.send("Hello World123");     
-      res.sendFile('index.html', { root: __dirname+'/dist/datenbanken-projekt/browser' });    //TODO rename to your app-name
+      res.sendFile('index.html', { root: __dirname+'/dist/datenbanken-projekt/browser' });    
 });
 
-app.get('/film', function(req,res) {
+app.get('/home-page', function(req,res) {
+      res.sendFile('index.html', { root: __dirname+'/dist/datenbanken-projekt/browser' });
+});
+
+
+
+/*app.get('/film', function(req,res) {
       const con = mysql.createConnection({
             database: "sakila",
             host: "localhost",
@@ -48,4 +54,4 @@ app.get('/film', function(req,res) {
                   });
             })
       })
-});
+});*/
