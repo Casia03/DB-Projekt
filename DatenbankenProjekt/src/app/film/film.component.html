@@ -17,17 +17,15 @@
 
     <div class="main-list">
         <div class="main-list-container">
-            <div class="main-list-items">
+            <div class="main-list-items" *ngFor="let film of films">
                 <div class="list-item">
-                    <img src="film1.jpg" alt="Film 1">
+                    <img [src]="film.image_url" alt="{{film.title}}">
                     <div class="item-info">
-                        <h3>Film Name 1</h3>
+                        <h3>{{film.title}}</h3>
                         <div class="item-tags">
-                            <span>Tag 1</span>
-                            <span>Tag 2</span>
-                            <span>Tag 3</span>
+                            <span *ngFor="let tag of film.tags">{{tag}}</span>
                         </div>
-                        <p>Beschreibung 1</p>
+                        <p>{{film.description}}</p>
                     </div>
                 </div>        
             </div>
