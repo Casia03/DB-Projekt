@@ -1,36 +1,41 @@
 <div class="container">
     <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
+        <!-- Button zum Ausfahren der Sidebar -->
+        <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- Navigation der Sidebar -->
+        <nav>
+            <ul>
+                <li><a routerLink="/home-page">Home</a></li>
+                <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
+                <li><a routerLink="/film-list">Film Liste</a></li>
+                <li class="film"><a>Filme</a></li>
+            </ul>
+        </nav>      
+    </div>
+
+    <header>
         <button class="sidebar-toggle" (click)="toggleSidebar()">
             <span></span>
             <span></span>
             <span></span>
         </button>
-        <nav>
-            <ul>
-                <li><a routerLink="/home-page">Home</a></li>
-                <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
-                <li class="film-liste"><a>Film Liste</a></li>
-                <li><a routerLink="/film">Filme</a></li>
-            </ul>
-        </nav>
-    </div>
-
+    </header>
+  
     <div class="main-list">
-        <div class="main-list-container">
-            <div class="main-list-items" *ngFor="let film of films">
-                <div class="list-item">
-                    <img [src]="film.image_url" alt="{{film.title}}">
-                    <div class="item-info">
-                        <h3>{{film.title}}</h3>
-                        <div class="item-tags">
-                            <span *ngFor="let tag of film.tags">{{tag}}</span>
-                        </div>
-                        <p>{{film.description}}</p>
-                    </div>
-                </div>        
-            </div>
-         </div>
+      <div class="main-list-container">
+        <div class="list-item">
+          <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
+          <div class="item-info">
+            <h3>{{ film.title }}</h3>
+            <p>{{ film.description }}</p>
+            <!-- Hier könnten weitere Filmdetails rein -->
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-
-
+  </div>
+  

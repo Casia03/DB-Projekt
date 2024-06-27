@@ -36,8 +36,8 @@ export class HomePageComponent {
     { title: 'Film 25' },
   ];
 
-  currentPage: number = 1;
-  totalPages: number = 5;
+  currentPage: number = 0;
+  totalPages: number = 4;
   itemsPerPage = 5;
   slideDirection = '';
   isAnimating = false;

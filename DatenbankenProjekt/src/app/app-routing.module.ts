@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'home-page', pathMatch: 'full' }, // Standardroute zur Homepage
   { path: 'home-page', component: HomePageComponent },
   { path: 'film', component: FilmComponent },
+  { path: 'film/:id', component: FilmComponent },
   { path: 'film-list', component: FilmListComponent },
   { path: 'user-login', component: UserLoginComponent },
 

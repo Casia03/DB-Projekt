@@ -28,35 +28,13 @@
     <div class="main-list">
         <div class="main-list-container">
             <div class="main-list-items">
-                <div class="list-item">
-                    <img src="bild1.jpg" alt="Bild 1">
+                <div class="list-item" *ngFor="let film of films">
+                    <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
                     <div class="item-info">
-                        <h3>Name 1</h3>
-                        <p>Beschreibung 1</p>
+                        <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
+                        <p>{{film.description}}</p>
                     </div>
                 </div>
-                <div class="list-item">
-                    <img src="bild2.jpg" alt="Bild 2">
-                    <div class="item-info">
-                        <h3>Name 2</h3>
-                        <p>Beschreibung 2</p>
-                    </div>
-                </div>
-                <div class="list-item">
-                    <img src="bild3.jpg" alt="Bild 3">
-                    <div class="item-info">
-                        <h3>Name 3</h3>
-                        <p>Beschreibung 3</p>
-                    </div>
-                </div>
-            </div>
-            <div class="side-list">
-                <h3>Nebenliste</h3>
-                <ul>
-                    <li>Eintrag 1</li>
-                    <li>Eintrag 2</li>
-                    <li>Eintrag 3</li>
-                </ul>
             </div>
         </div>
     </div>

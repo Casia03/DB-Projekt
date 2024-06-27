@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-film',
@@ -7,43 +8,35 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./film.component.css']
 })
 export class FilmComponent implements OnInit {
-  isSidebarOpen = false; // Initialer Zustand der Sidebar
-  films: any[] = []; //Array der Filme beinhaltet
+  isSidebarOpen = false;
+  film: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient
+  ) { }
 
   ngOnInit(): void {
-    this.getFilms(); //Filmdaten werden aufgerufen wenn das component initialisiert wird
+    this.loadFilm(); // Call loadFilm on component initialization
   }
+
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
-  getFilms() {
-    this.http.get<any[]>('/film').subscribe(
-      (data: any[]) => {
-        console.log(data);
-        this.films = data;
+  loadFilm() {
+    const filmId = this.route.snapshot.paramMap.get('id'); // Film-ID aus der URL holen
+
+    this.http.get<any>(`/film/${filmId}`).subscribe(
+      (film: any) => {
+        console.log(film);
+        this.film = film;
+        this.film.image_url = `/assets/pictures/${film.image_link}`; // Anpassen der Bild-URL
       },
       (error: HttpErrorResponse) => {
-        console.error('Error fetching films', error);
+        console.error('Error loading film:', error);
       }
     );
   }
-
-
-  /*
-  http:any;
-  constructor(client:HttpClient) {
-    this.http = client;
-  }
-  film:any;
-  getFilm() {
-    this.http.get("/film").subscribe((data:any) =>{
-      console.log(data);
-      this.film = data;
-    });
-  }
-  */
 
 }

@@ -1,16 +1,17 @@
- // set up ======================== 
-var express  = require('express'); 
-var app      = express();                               // create our app w/ express 
-var path     = require('path'); 
-var mysql    = require('mysql2');
-var bodyParser = require('body-parser');
+// set up ======================== 
+var express = require('express');
+var app = express();                               // create our app w/ express 
+var path = require('path');
+var mysql = require('mysql2');
+
+bodyParser = require('body-parser');
 
 const con = mysql.createConnection({
       database: "sakila",
       host: "localhost",
       user: "root",
-      password: "vNikopolidis290803-_"
-}) ;
+      password: "aamijnawssh123"
+});
 
 // support parsing of application/json type post data
 app.use(bodyParser.json());
@@ -18,41 +19,47 @@ app.use(bodyParser.json());
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
 
- // configuration =================
-app.use(express.static(path.join(__dirname, '/dist/datenbanken-projekt/browser')));  
- 
- // listen (start app with node server.js) ======================================
-app.listen(8080, function(){    
-     console.log("App listening on port 8080");
+// configuration =================
+app.use(express.static(path.join(__dirname, '/dist/datenbanken-projekt/browser')));
+
+// listen (start app with node server.js) ======================================
+app.listen(8080, function () {
+      console.log("App listening on port 8080");
 });
 
- // application -------------------------------------------------------------
-app.get('/', function(req,res) 
-{     
+// application -------------------------------------------------------------
+app.get('/', function (req, res) {
       //res.send("Hello World123");     
-      res.sendFile('index.html', { root: __dirname+'/dist/datenbanken-projekt/browser' });    
+      res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
 });
 
-app.get('/home-page', function(req,res) {
-      res.sendFile('index.html', { root: __dirname+'/dist/datenbanken-projekt/browser' });
+app.get('/home-page', function (req, res) {
+      res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
 });
 
-
-
-app.get('/film', function(req,res) {
-      con.connect(function(err) {
-            if(err) throw err;
-            con.query("SELECT * FROM film WHERE image_nr=14", function(err, results) {
-                  if(err) throw err;
-                  console.log(results);
-                  res.send(results);
-                  con.end(function(err) {
-                        if(err) throw err;
-                        console.log("Disconnected");
-                  });
-            })
-      })
-});
+// Fetch films with image URLs
+  app.get('/film', function(req, res) {
+      con.query("SELECT film.*, image.link AS image_link FROM film LEFT JOIN image ON film.image_nr = image.image_id", function(err, results) {
+          if (err) {
+              console.error("Error fetching films:", err);
+              res.status(500).send("Error fetching films");
+          } else {
+              console.log(results);
+  
+              // Verarbeitung der Ergebnisse: Erstellen der image_url für jedes Film-Objekt
+              results.forEach(film => {
+                  if (film.image_link) {
+                      film.image_url = `/assets/pictures/${film.image_link}`;
+                  } else {
+                      film.image_url = `/assets/pictures/default.jpg`; // Fallback für den Fall, dass kein Bild verfügbar ist
+                  }
+              });
+  
+              // Senden der verarbeiteten Ergebnisse an die Angular-Anwendung
+              res.send(results);
+          }
+      });
+  });
 
 // Registration 
 app.post('/api/register', function(req, res) {
@@ -88,4 +95,3 @@ app.post('/api/login', function(req, res) {
           }
       });
   });
-  
