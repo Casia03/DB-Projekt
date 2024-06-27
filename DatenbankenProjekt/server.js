@@ -54,9 +54,8 @@ app.get('/film', function(req,res) {
       })
 });
 
-// Registration route
+// Registration 
 app.post('/api/register', function(req, res) {
-      console.log("Garnichtmal hier gelandet")
       const { username, email, password } = req.body;
       const query = "INSERT INTO nutzer (Nutzername, Email, Passwort) VALUES (?, ?, ?)";
       con.query(query, [username, email, password], function(err, results) {
@@ -71,18 +70,22 @@ app.post('/api/register', function(req, res) {
       });
   });
   
-  // Login route
+// Login 
 app.post('/api/login', function(req, res) {
       const { username, password } = req.body;
       const query = "SELECT * FROM nutzer WHERE Nutzername = ? AND Passwort = ?";
       con.query(query, [username, password], function(err, results) {
           if (err) {
+              console.log("Login failed");
               console.error("Error during login:", err);
-              res.status(500).send("Login failed.");
+              res.status(500).json({ message: "Login failed." });
           } else if (results.length > 0) {
-              res.status(200).send("Login successful.");
+              console.log("Login successful");
+              res.status(200).json({ message: "Login successful." });
           } else {
-              res.status(401).send("Invalid username or password.");
+              console.log("Invalid username or password");
+              res.status(401).json({ message: "Invalid username or password." });
           }
       });
   });
+  
