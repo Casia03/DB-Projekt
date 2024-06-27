@@ -6,6 +6,35 @@ var mysql    = require('mysql2');
  
 bodyParser = require('body-parser');
 
+// Registration route
+app.post('/api/register', function(req, res) {
+      const { username, email, password } = req.body;
+      const query = "INSERT INTO nutzer (Nutzername, Email, Password) VALUES (?, ?, ?)";
+      con.query(query, [username, email, password], function(err, results) {
+          if (err) {
+              console.error("Error registering user:", err);
+              res.status(500).send("Registration failed.");
+          } else {
+              res.status(200).send("Registration successful.");
+          }
+      });
+  });
+  
+  // Login route
+app.post('/api/login', function(req, res) {
+      const { username, password } = req.body;
+      const query = "SELECT * FROM nutzer WHERE Nutzername = ? AND Password = ?";
+      con.query(query, [username, password], function(err, results) {
+          if (err) {
+              console.error("Error during login:", err);
+              res.status(500).send("Login failed.");
+          } else if (results.length > 0) {
+              res.status(200).send("Login successful.");
+          } else {
+              res.status(401).send("Invalid username or password.");
+          }
+      });
+  });
 
 // support parsing of application/json type post data
 app.use(bodyParser.json());
@@ -34,12 +63,12 @@ app.get('/home-page', function(req,res) {
 
 
 
-/*app.get('/film', function(req,res) {
+app.get('/film', function(req,res) {
       const con = mysql.createConnection({
             database: "sakila",
             host: "localhost",
             user: "root",
-            password: "passwort"
+            password: "vNikopolidis290803-_"
       }) ;
 
       con.connect(function(err) {
@@ -54,4 +83,4 @@ app.get('/home-page', function(req,res) {
                   });
             })
       })
-});*/
+});

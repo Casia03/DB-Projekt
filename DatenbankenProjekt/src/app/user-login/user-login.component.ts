@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-login',
   templateUrl: './user-login.component.html',
   styleUrls: ['./user-login.component.css']
 })
-
 export class UserLoginComponent {
 
-  signupUsers: any[] = [];
   signupObj: any = {
     username: '',
     email: '',
@@ -21,23 +19,29 @@ export class UserLoginComponent {
     password: ''
   };
 
-  constructor() {
+  constructor(private http: HttpClient) {}
+
+  onSignUp() {
+    this.http.post('/api/register', this.signupObj)
+      .subscribe(response => {
+        console.log("Registration successful:", response);
+        this.signupObj = {
+          username: '',
+          email: '',
+          password: ''
+        };
+      }, error => {
+        console.error("Registration error:", error);
+      });
   }
 
-  onSignUp(){
-    console.log("User " + this.signupObj + " Succesfully signed up")
-    this.signupUsers.push(this.signupObj)
-    localStorage.setItem('signUpUsers', JSON.stringify(this.signupUsers))
-    this.signupObj = {
-      username: '',
-      email: '',
-      password: ''
-    };
+  onLogin() {
+    this.http.post('/api/login', this.loginObj)
+      .subscribe(response => {
+        console.log("Login successful:", response);
+        // Handle login success (e.g., store token, redirect)
+      }, error => {
+        console.error("Login error:", error);
+      });
   }
-
-
-  onLogin(){
-
-  }
-
 }
