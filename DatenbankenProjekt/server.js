@@ -3,38 +3,8 @@ var express  = require('express');
 var app      = express();                               // create our app w/ express 
 var path     = require('path'); 
 var mysql    = require('mysql2');
- 
-bodyParser = require('body-parser');
+var bodyParser = require('body-parser');
 
-// Registration route
-app.post('/api/register', function(req, res) {
-      const { username, email, password } = req.body;
-      const query = "INSERT INTO nutzer (Nutzername, Email, Password) VALUES (?, ?, ?)";
-      con.query(query, [username, email, password], function(err, results) {
-          if (err) {
-              console.error("Error registering user:", err);
-              res.status(500).send("Registration failed.");
-          } else {
-              res.status(200).send("Registration successful.");
-          }
-      });
-  });
-  
-  // Login route
-app.post('/api/login', function(req, res) {
-      const { username, password } = req.body;
-      const query = "SELECT * FROM nutzer WHERE Nutzername = ? AND Password = ?";
-      con.query(query, [username, password], function(err, results) {
-          if (err) {
-              console.error("Error during login:", err);
-              res.status(500).send("Login failed.");
-          } else if (results.length > 0) {
-              res.status(200).send("Login successful.");
-          } else {
-              res.status(401).send("Invalid username or password.");
-          }
-      });
-  });
 
 // support parsing of application/json type post data
 app.use(bodyParser.json());
@@ -84,3 +54,36 @@ app.get('/film', function(req,res) {
             })
       })
 });
+
+// Registration route
+app.post('/api/register', function(req, res) {
+      console.log("Garnichtmal hier gelandet")
+      const { username, email, password } = req.body;
+      const query = "INSERT INTO nutzer (Nutzername, Email, Password) VALUES (?, ?, ?)";
+      con.query(query, [username, email, password], function(err, results) {
+          if (err) {
+              console.log("Nicht registriert")
+              console.error("Error registering user:", err);
+              res.status(500).send("Registration failed.");
+          } else {
+              console.log("Registriert")
+              res.status(200).send("Registration successful.");
+          }
+      });
+  });
+  
+  // Login route
+app.post('/api/login', function(req, res) {
+      const { username, password } = req.body;
+      const query = "SELECT * FROM nutzer WHERE Nutzername = ? AND Password = ?";
+      con.query(query, [username, password], function(err, results) {
+          if (err) {
+              console.error("Error during login:", err);
+              res.status(500).send("Login failed.");
+          } else if (results.length > 0) {
+              res.status(200).send("Login successful.");
+          } else {
+              res.status(401).send("Invalid username or password.");
+          }
+      });
+  });
