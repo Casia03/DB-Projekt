@@ -5,6 +5,12 @@ var path     = require('path');
 var mysql    = require('mysql2');
 var bodyParser = require('body-parser');
 
+const con = mysql.createConnection({
+      database: "sakila",
+      host: "localhost",
+      user: "root",
+      password: "vNikopolidis290803-_"
+}) ;
 
 // support parsing of application/json type post data
 app.use(bodyParser.json());
@@ -34,13 +40,6 @@ app.get('/home-page', function(req,res) {
 
 
 app.get('/film', function(req,res) {
-      const con = mysql.createConnection({
-            database: "sakila",
-            host: "localhost",
-            user: "root",
-            password: "vNikopolidis290803-_"
-      }) ;
-
       con.connect(function(err) {
             if(err) throw err;
             con.query("SELECT * FROM film WHERE image_nr=14", function(err, results) {
@@ -59,7 +58,7 @@ app.get('/film', function(req,res) {
 app.post('/api/register', function(req, res) {
       console.log("Garnichtmal hier gelandet")
       const { username, email, password } = req.body;
-      const query = "INSERT INTO nutzer (Nutzername, Email, Password) VALUES (?, ?, ?)";
+      const query = "INSERT INTO nutzer (Nutzername, Email, Passwort) VALUES (?, ?, ?)";
       con.query(query, [username, email, password], function(err, results) {
           if (err) {
               console.log("Nicht registriert")
@@ -75,7 +74,7 @@ app.post('/api/register', function(req, res) {
   // Login route
 app.post('/api/login', function(req, res) {
       const { username, password } = req.body;
-      const query = "SELECT * FROM nutzer WHERE Nutzername = ? AND Password = ?";
+      const query = "SELECT * FROM nutzer WHERE Nutzername = ? AND Passwort = ?";
       con.query(query, [username, password], function(err, results) {
           if (err) {
               console.error("Error during login:", err);
