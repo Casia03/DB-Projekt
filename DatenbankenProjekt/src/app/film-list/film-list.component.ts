@@ -1,17 +1,34 @@
-import { Component } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-film-list',
   templateUrl: './film-list.component.html',
-  styleUrl: './film-list.component.css'
+  styleUrls: ['./film-list.component.css']
 })
+export class FilmListComponent implements OnInit {
+  isSidebarOpen = false; // Initial state of the sidebar
+  films: any[] = []; // Array to hold multiple films
 
+  constructor(private http: HttpClient) {}
 
-
-export class FilmListComponent {
-  isSidebarOpen = false; // Initialer Zustand der Sidebar
+  ngOnInit(): void {
+    this.getFilms(); // Call getFilms on component initialization
+  }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  getFilms() {
+    this.http.get<any[]>('/film').subscribe(
+      (data: any[]) => {
+        console.log(data);
+        this.films = data;
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Error fetching films', error);
+      }
+    );
   }
 }

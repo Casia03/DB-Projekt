@@ -1,41 +1,41 @@
 <div class="container">
     <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
+        <!-- Button zum Ausfahren der Sidebar -->
+        <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- Navigation der Sidebar -->
+        <nav>
+            <ul>
+                <li><a routerLink="/home-page">Home</a></li>
+                <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
+                <li><a routerLink="/film-list">Film Liste</a></li>
+                <li class="film"><a>Filme</a></li>
+            </ul>
+        </nav>      
+    </div>
+
+    <header>
         <button class="sidebar-toggle" (click)="toggleSidebar()">
             <span></span>
             <span></span>
             <span></span>
         </button>
-        <nav>
-            <ul>
-                <li><a routerLink="/home-page">Home</a></li>
-                <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
-                <li class="film-liste"><a>Film Liste</a></li>
-                <li><a routerLink="/film">Filme</a></li>
-                <li><a routerLink="/user">User</a></li>
-
-            </ul>
-        </nav>
-    </div>
-
+    </header>
+  
     <div class="main-list">
-        <div class="main-list-container">
-            <div class="main-list-items">
-                <div class="list-item">
-                    <img src="../../assets/film1.jpg" alt="Film 1" class="film-image">
-                    <div class="item-info">
-                        <h1>Film Name 1</h1>
-                        <hr>
-                        <p>Beschreibung 1</p>
-                        <hr>
-                        <div class="item-tags">
-                            <span>Tag 1</span>
-                            <span>Tag 2</span>
-                            <span>Tag 3</span>
-                        </div>
-                    </div>
-                </div>        
-            </div>
-         </div>
+      <div class="main-list-container">
+        <div class="list-item">
+          <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
+          <div class="item-info">
+            <h3>{{ film.title }}</h3>
+            <p>{{ film.description }}</p>
+            <!-- Hier könnten weitere Filmdetails rein -->
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-
+  </div>
+  
