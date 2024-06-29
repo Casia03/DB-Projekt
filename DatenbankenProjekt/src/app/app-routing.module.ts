@@ -5,6 +5,7 @@ import { FilmComponent } from './film/film.component';
 import { FilmListComponent } from './film-list/film-list.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { UserComponent } from './user/user.component';
+import { ListCreatorComponent } from './list-creator/list-creator.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home-page', pathMatch: 'full' }, // Standardroute zur Homepage
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'film/:id', component: FilmComponent },
   { path: 'film-list', component: FilmListComponent },
   { path: 'user-login', component: UserLoginComponent },
+  { path: 'list-creator', component: ListCreatorComponent },
 
   { path: 'user', component: UserComponent },
   // Optionale ERROR 404-Seite
