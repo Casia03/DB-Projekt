@@ -157,13 +157,36 @@ main {
 }
 
 .movie-card {
-    width: 10%;
+    width: 180px; /* Breite der Movie Cards */
     padding: 20px;
     background: #444;
     color: #fff;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Schatten hinzufügen */
+    transition: transform 0.3s ease; /* Animationseffekt bei Hover */
 }
+
+.movie-card:hover {
+    transform: translateY(-5px); /* Beim Hover leicht nach oben verschieben */
+}
+
+.movie-card button {
+    background: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.movie-card button:focus {
+    outline: none; /* Entfernt den Fokus-Rahmen */
+}
+
+.movie-card button:hover {
+    text-decoration: underline; /* Unterstrich bei Hover */
+}
+
 
 .pagination-buttons{
     margin-top: 20px;

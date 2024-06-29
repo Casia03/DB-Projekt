@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -6,49 +7,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent {
-  isSidebarOpen = false; // Initialer Zustand der Sidebar
-
-  movies = [
-    { title: 'Film 1' },
-    { title: 'Film 2' },
-    { title: 'Film 3' },
-    { title: 'Film 4' },
-    { title: 'Film 5' },
-    { title: 'Film 6' },
-    { title: 'Film 7' },
-    { title: 'Film 8' },
-    { title: 'Film 9' },
-    { title: 'Film 10' },
-    { title: 'Film 11' },
-    { title: 'Film 12' },
-    { title: 'Film 13' },
-    { title: 'Film 14' },
-    { title: 'Film 15' },
-    { title: 'Film 16' },
-    { title: 'Film 17' },
-    { title: 'Film 18' },
-    { title: 'Film 19' },
-    { title: 'Film 20' },
-    { title: 'Film 21' },
-    { title: 'Film 22' },
-    { title: 'Film 23' },
-    { title: 'Film 24' },
-    { title: 'Film 25' },
+  isSidebarOpen = false;
+  labels = [
+    { label: 'Neue Filme', value: '2024' },
+    { label: 'Für Kinder nicht geeignet', value: 'R' },
+    { label: '80s Filme', value: '1980-1989' },
+    { label: 'Filme ab 17 Jahren', value: 'NC-17' },
+    { label: '90s Filme', value: '1990-1999' },
+    { label: 'Filme für Kinder', value: 'G' },
+    { label: '2000er Filme', value: '2000-2009' },
+    { label: 'Filme für Teens', value: 'PG-13' },
+    { label: 'Familienfreundlich', value: 'PG' },
   ];
-
-  currentPage: number = 0;
-  totalPages: number = 4;
+  currentPage = 0;
   itemsPerPage = 5;
   slideDirection = '';
   isAnimating = false;
 
-  ngOnInit(){
-    this.disableAnimationButtons();
-  }
+  constructor(private router: Router) { }
 
-  get displayedMovies() {
-    const startIndex = this.currentPage * this.itemsPerPage;
-    return this.movies.slice(startIndex, startIndex + this.itemsPerPage);
+  ngOnInit() {
+    this.disableAnimationButtons();
   }
 
   toggleSidebar() {
@@ -56,7 +35,7 @@ export class HomePageComponent {
   }
 
   nextPage() {
-    if (!this.isAnimating && (this.currentPage + 1) * this.itemsPerPage < this.movies.length) {
+    if (!this.isAnimating && (this.currentPage + 1) * this.itemsPerPage < this.getTotalItemsCount()) {
       this.isAnimating = true;
       this.slideDirection = 'slide-left';
       setTimeout(() => {
@@ -81,11 +60,55 @@ export class HomePageComponent {
     }
   }
 
-  private disableAnimationButtons(){
+  private disableAnimationButtons() {
     const animationButtons = document.querySelectorAll('.pagination-buttons button');
     animationButtons.forEach(button => button.setAttribute('disabled', 'true'));
     setTimeout(() => {
       animationButtons.forEach(button => button.removeAttribute('disabled'))
-    }, 400)
+    }, 400);
+  }
+
+  navigateToFilmList(category: string) {
+    switch (category) {
+      case '2024':
+        this.router.navigate(['film-list/year/2024']);
+        break;
+      case '1980-1989':
+        this.router.navigate(['film-list/year/1980-1989']);
+        break;
+      case '1990-1999':
+        this.router.navigate(['film-list/year/1990-1999']);
+        break;
+      case '2000-2009':
+        this.router.navigate(['film-list/year/2000-2009']);
+        break;
+      case 'G':
+        this.router.navigate(['film-list/rating/G']);
+        break;
+      case 'PG':
+        this.router.navigate(['/film-list/rating/PG']);
+        break;
+      case 'PG-13':
+        this.router.navigate(['/film-list/rating/PG-13']);
+        break;
+      case 'NC-17':
+        this.router.navigate(['/film-list/rating/NC-17']);
+        break;
+      case 'R':
+        this.router.navigate(['/film-list/rating/R']);
+        break;
+      default:
+        this.router.navigate(['/film-list']);
+        break;
+    }
+  }
+
+  private getTotalItemsCount(): number {
+    return this.labels.length;
+  }
+
+  getPagedItems(items: any[], page: number, pageSize: number): any[] {
+    const startIndex = page * pageSize;
+    return items.slice(startIndex, startIndex + pageSize);
   }
 }

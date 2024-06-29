@@ -10,7 +10,8 @@ body {
     z-index: 1;
     overflow-x: hidden;
     position: relative;
-    min-height: 100vh; /* Ensure body takes at least full viewport height */
+    min-height: 100vh;
+    /* Ensure body takes at least full viewport height */
 }
 
 .context {
@@ -24,15 +25,18 @@ body {
     color: #fff;
     font-size: 50px;
 }
- 
+
 .area {
-    background: #181818;    
+    background: #181818;
     width: 100%;
-    height: 100vh; /* Full viewport height */
-    position: fixed; /* Fixed position to stay in place during scrolling */
+    height: 100vh;
+    /* Full viewport height */
+    position: fixed;
+    /* Fixed position to stay in place during scrolling */
     top: 0;
     left: 0;
-    z-index: -1; /* Place behind other content */
+    z-index: -1;
+    /* Place behind other content */
 }
 
 .circles {
@@ -142,4 +146,13 @@ body {
         opacity: 0;
         border-radius: 50%;
     }
+}
+
+.logo {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    width: 125px;
+    height: 125px;
 }

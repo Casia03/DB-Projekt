@@ -9,7 +9,7 @@ const con = mysql.createConnection({
     database: "sakila",
     host: "localhost",
     user: "root",
-    password: "1231"
+    password: "aamijnawssh123"
 });
 
 // support parsing of application/json type post data
@@ -36,8 +36,32 @@ app.get('/home-page', function (req, res) {
     res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
 });
 
-// Fetch films with image URLs
-app.get('/film', function (req, res) {
+//Ein Film
+app.get('/film/:id', function (req, res) {
+    const filmId = req.params.id;
+    const query = `
+        SELECT film.*, image.link AS image_link
+        FROM film
+        LEFT JOIN image ON film.image_nr = image.image_id
+        WHERE film.film_id = ?
+    `;
+
+    con.query(query, [filmId], function (err, results) {
+        if (err) {
+            console.error("Error fetching film:", err);
+            res.status(500).send("Error fetching film");
+        } else if (results.length > 0) {
+            const film = results[0];
+            film.image_url = film.image_link ? `/assets/pictures/${film.image_link}` : `/assets/pictures/default.jpg`;
+            res.send(film);
+        } else {
+            res.status(404).send("Film not found");
+        }
+    });
+});
+
+// Alle Filme
+app.get('/film-list', function (req, res) {
     con.query("SELECT film.*, image.link AS image_link FROM film LEFT JOIN image ON film.image_nr = image.image_id", function (err, results) {
         if (err) {
             console.error("Error fetching films:", err);
@@ -60,25 +84,82 @@ app.get('/film', function (req, res) {
     });
 });
 
-app.get('/film/:id', function (req, res) {
-    const filmId = req.params.id;
+//Filme nach Jahr
+app.get('/api/films/year/:year', function (req, res) {
+    const year = req.params.year;
     const query = `
         SELECT film.*, image.link AS image_link
         FROM film
         LEFT JOIN image ON film.image_nr = image.image_id
-        WHERE film.film_id = ?
+        WHERE film.release_year = ?
     `;
 
-    con.query(query, [filmId], function (err, results) {
+    con.query(query, [year], function (err, results) {
         if (err) {
-            console.error("Error fetching film:", err);
-            res.status(500).send("Error fetching film");
-        } else if (results.length > 0) {
-            const film = results[0];
-            film.image_url = film.image_link ? `/assets/pictures/${film.image_link}` : `/assets/pictures/default.jpg`;
-            res.send(film);
+            console.error("Error fetching films by year:", err);
+            res.status(500).send("Error fetching films by year");
         } else {
-            res.status(404).send("Film not found");
+            results.forEach(film => {
+                if (film.image_link) {
+                    film.image_url = `/assets/pictures/${film.image_link}`;
+                } else {
+                    film.image_url = `/assets/pictures/default.jpg`; // Fallback for no image
+                }
+            });
+
+            res.send(results);
+        }
+    });
+});
+//Filme von Jahr bis Jahr
+app.get('/api/films/year-range/:startYear/:endYear', function (req, res) {
+    const startYear = req.params.startYear;
+    const endYear = req.params.endYear;
+    const query = `
+        SELECT film.*, image.link AS image_link
+        FROM film
+        LEFT JOIN image ON film.image_nr = image.image_id
+        WHERE film.release_year BETWEEN ? AND ?
+    `;
+
+    con.query(query, [startYear, endYear], function (err, results) {
+        if (err) {
+            console.error("Error fetching films by year range:", err);
+            res.status(500).send("Error fetching films by year range");
+        } else {
+            results.forEach(film => {
+                if (film.image_link) {
+                    film.image_url = `/assets/pictures/${film.image_link}`;
+                } else {
+                    film.image_url = `/assets/pictures/default.jpg`; // Fallback for no image
+                }
+            });
+
+            res.send(results);
+        }
+    });
+});
+
+// Filme nach Rating
+app.get('/api/films/rating/:rating', function (req, res) {
+    const rating = req.params.rating;
+    const query = `
+        SELECT film.*, image.link AS image_link
+        FROM film
+        LEFT JOIN image ON film.image_nr = image.image_id
+        WHERE film.rating = ?
+    `;
+
+    con.query(query, [rating], function (err, results) {
+        if (err) {
+            console.error("Error fetching films by rating:", err);
+            res.status(500).send("Error fetching films by rating");
+        } else {
+            results.forEach(film => {
+                film.image_url = film.image_link ? `/assets/pictures/${film.image_link}` : `/assets/pictures/default.jpg`;
+            });
+
+            res.send(results);
         }
     });
 });
