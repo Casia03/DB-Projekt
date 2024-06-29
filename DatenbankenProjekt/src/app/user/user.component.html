@@ -1,5 +1,31 @@
 <div class="container">
-    <div class="header">
+    <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
+        <!-- Button zum Ausfahren der Sidebar -->
+        <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- Navigation der Sidebar -->
+        <nav>
+            <ul>
+                <li><a routerLink="/home-page">Home</a></li>
+                <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
+                <li><a routerLink="/film-list">Film Liste</a></li>
+                <li class="user"><a>User</a></li>
+            </ul>
+        </nav>      
+    </div>
+
+    <header>
+        <button class="sidebar-toggle" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+    
+    <div class="top_head">
         <h1>User Profil</h1>
     </div>
 

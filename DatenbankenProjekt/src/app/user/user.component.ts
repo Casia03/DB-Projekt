@@ -7,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserComponent implements OnInit {
   user: any;
-
+  isSidebarOpen = false;
+  
   ngOnInit() {
     // Beispielhafte User-Daten, diese sollten normalerweise von einem Service geladen werden
     this.user = {
@@ -19,5 +20,9 @@ export class UserComponent implements OnInit {
         { title: 'Interstellar', rating: 8 }
       ]
     };
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 }
