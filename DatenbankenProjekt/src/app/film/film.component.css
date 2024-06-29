@@ -165,3 +165,22 @@
     border-radius: 5px;
     font-size: 0.9em;
 }
+.circle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 20px;
+    margin: 10px;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+    color: #000;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.circle:hover {
+    background-color: #e0e0e0;
+}
