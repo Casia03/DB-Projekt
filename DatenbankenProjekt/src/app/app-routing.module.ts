@@ -6,6 +6,8 @@ import { FilmListComponent } from './film-list/film-list.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { UserComponent } from './user/user.component';
 import { ListCreatorComponent } from './list-creator/list-creator.component';
+import { AuthGuard } from './auth.guard';
+import { AuthService } from './auth.service';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home-page', pathMatch: 'full' }, // Standardroute zur Homepage
@@ -18,8 +20,7 @@ const routes: Routes = [
   { path: 'film-list/rating/:rating', component: FilmListComponent },
   { path: 'user-login', component: UserLoginComponent },
   { path: 'list-creator', component: ListCreatorComponent },
-
-  { path: 'user', component: UserComponent },
+  { path: 'user', component: UserComponent, canActivate: [AuthGuard] },
   // Optionale ERROR 404-Seite
   { path: '**', redirectTo: 'home-page' } // Wildcard-Route, die auf die Homepage umleitet
 ];
