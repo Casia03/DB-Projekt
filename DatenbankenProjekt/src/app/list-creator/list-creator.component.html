@@ -34,8 +34,11 @@
                         <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
                         <p>{{film.description}}</p>
                     </div>
+                    <div class="film-details"></div>
                 </div>
+                <input type="checkbox" [(ngModel)]="films.selected" (change)="toggleSelection(film)">
             </div>
         </div>
+        <button (click)="createList()">Liste erstellen</button>
     </div>
 </div>
