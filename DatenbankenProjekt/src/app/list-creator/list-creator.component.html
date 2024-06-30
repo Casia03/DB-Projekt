@@ -5,7 +5,7 @@
             <span></span>
             <span></span>
         </button>
-        
+
         <!-- Navigation der Sidebar -->
         <nav>
             <ul>
@@ -14,7 +14,7 @@
                 <li class="film-liste"><a>Film Liste</a></li>
                 <li><a routerLink="/user">User</a></li>
             </ul>
-        </nav>      
+        </nav>
     </div>
 
     <header>
@@ -27,17 +27,17 @@
 
     <div class="main-list">
         <div class="main-list-container">
-            <div class="main-list-items">
-                <div class="list-item" *ngFor="let film of films">
-                    <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
-                    <div class="item-info">
-                        <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
-                        <p>{{film.description}}</p>
-                    </div>
-                    <div class="film-details"></div>
-                </div>
-                <input type="checkbox" [(ngModel)]="films.selected" (change)="toggleSelection(film)">
+          <div class="main-list-items">
+            <div class="list-item" *ngFor="let film of films">
+              <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
+              <div class="item-info">
+                <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
+                <p>{{film.description}}</p>
+              </div>
+              <div class="film-details"></div>
+              <input type="checkbox" [(ngModel)]="film.selected" (change)="toggleSelection(film)">
             </div>
+          </div>
         </div>
         <button (click)="createList()">Liste erstellen</button>
     </div>
