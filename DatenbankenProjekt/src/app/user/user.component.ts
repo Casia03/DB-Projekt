@@ -1,28 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit {
-  user: any;
-  isSidebarOpen = false;
-  
-  ngOnInit() {
-    // Beispielhafte User-Daten, diese sollten normalerweise von einem Service geladen werden
-    this.user = {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      joinDate: new Date('2023-01-01'),
-      ratedMovies: [
-        { title: 'Inception', rating: 9 },
-        { title: 'Interstellar', rating: 8 }
-      ]
-    };
+export class UserComponent {
+  user = {
+    vorname: 'Max Mustermann',
+    geburtsdatum: '01.01.1990',
+    email: 'max.mustermann@example.com',
+    liste1: ['Film 1', 'Film 2', 'Film 3'],
+    liste2: ['Film A', 'Film B', 'Film C']
+  };
+  newListName: string = '';
+
+  constructor(private router: Router) {}
+
+  logout() {
+    // Implement your logout logic here
+    // For example, clearing user session, tokens, etc.
+    console.log('User logged out');
+    this.router.navigate(['/login']);
   }
 
-  toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
+  createList() {
+    // Implement your create list logic here
+    console.log('List created: ', this.newListName);
   }
 }

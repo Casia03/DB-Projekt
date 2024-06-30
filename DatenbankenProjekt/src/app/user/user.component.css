@@ -1,144 +1,124 @@
-/* Allgemeine Stile für die User-Komponente */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    padding: 20px;
+    border-radius: 30px;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
     justify-content: center;
-    padding: 20px;
-    color: #333;
-}
-
-.sidebar {
-    width: 250px;
-    top: 20px;
-    height: calc(100vh - 50px); /* Verwenden Sie 100vh für die Höhe der Sidebar */
-    background-color: #333;
-    position: fixed; /* Ändern Sie die Position auf fixed */
-    left: 0;
-    z-index: 1000;
-    transition: transform 0.4s ease;
-    transform: translateX(-100%);
-}
-
-.sidebar.open {
-    transform: translateX(-3.5%);
-}
-
-.sidebar nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.sidebar nav ul li {
-    padding: 10px 20px;
-    border-bottom: 1px solid #555;
-    transition: background-color 0.3s ease;
-}
-
-.sidebar nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-}
-
-.sidebar nav ul li:hover {
-    background-color: rgba(255, 255, 255, 0.233);
-}
-
-.sidebar nav ul li.user a {
-    color: #ffffff;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.sidebar nav ul li.user:hover {
-    background-color: transparent;
-}
-
-/* Stil für den Pfeil */
-.sidebar-toggle-arrow {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 999;
-}
-
-.sidebar-toggle-arrow:hover {
-    background-color: rgba(255, 255, 255, 0.233);
-    transition: background-color 0.3s ease;
-}
-
-.sidebar-toggle-arrow span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: #ffffff;
-    margin: 5px 0;
-}
-
-/* Sidebar-Toggle-Stile */
-.sidebar-toggle {
-    position: absolute;
-    left: 30px;
-    top: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 999;
-}
-
-.sidebar-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.233);
-    transition: background-color 0.3s ease;
-}
-
-.sidebar-toggle span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: #ffffff;
-    margin: 5px 0;
-}
-
-.sidebar-close {
-    position: absolute;
-    right: 10px; /* Abstand zum rechten Rand der Sidebar */
-    top: 50%; /* Zentrieren vertikal */
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-}   
-
-.top_head {
-    text-align: center;
+    width: 100%;
     margin-bottom: 20px;
-    z-index: 1;
 }
 
-.user-card {
-    width: 80%;
-    max-width: 600px;
-    background: #f5f5f5;
+.header h1 {
+    font-family: 'Arial', sans-serif;
+    color: gainsboro;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.haupt-container {
+    position: relative; /* Ensures that the child elements can be positioned absolutely */
+    width: 50%;
+    background: #f9f9f9;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.logout-button:hover {
+    background-color: #c82333;
+}
+
+.user-card, .list-section {
     margin-bottom: 20px;
-    text-align: left;
 }
 
-.user-card h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
+.user-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+    color: grey;
+    font-family: 'Times New Roman', Times, serif;
 }
 
-.user-card p {
-    margin: 5px 0;
+.user-field label {
+    margin-bottom: 5px;
+}
+
+.user-field span {
     font-size: 16px;
-    line-height: 1.5;
+    color: black;
+}
+
+.list-section h2 {
+    margin-bottom: 10px;
+    color: grey;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
+}
+
+.list-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.list-item input {
+    width: 150px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.create-list-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.create-list-container input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.create-list-container button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.create-list-container button:hover {
+    background-color: #0056b3;
 }

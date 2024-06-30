@@ -4,6 +4,7 @@ var app = express();                               // create our app w/ express
 var path = require('path');
 var mysql = require('mysql2');
 var bodyParser = require('body-parser');
+// const jwt = require('jsonwebtoken'); // fur tokens damit die user session nicht nach einem einfachen refresh verloren geht, implementiere spaeter
 
 const con = mysql.createConnection({
     database: "sakila",
@@ -198,3 +199,17 @@ app.post('/api/login', function (req, res) {
         }
     });
 });
+
+// // fur tokens
+// app.post('/api/login', (req, res) => {
+//     const { username, password } = req.body;
+//     // Replace this with actual authentication logic
+//     if (username === 'Nutzername' && password === 'Passwort') {
+//       // Return a fake token for demonstration
+//       const token = 'your-jwt-token';
+//       res.json({ token });
+//     } else {
+//       res.status(401).json({ message: 'Invalid credentials' });
+//     }
+//   });
+  
