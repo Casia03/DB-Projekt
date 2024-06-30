@@ -40,7 +40,7 @@ export class ListCreatorComponent implements OnInit {
   getFilms(): void {
     // Fetch films from your backend API or any other source
     // Replace the following code with your actual implementation
-    this.http.get<Film[]>('your-backend-api-url').subscribe(
+    this.http.get<Film[]>('/film-list').subscribe(
       (response: Film[]) => {
         this.films = response;
       },
