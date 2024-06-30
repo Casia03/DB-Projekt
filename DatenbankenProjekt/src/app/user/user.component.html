@@ -38,4 +38,11 @@
             <li *ngFor="let movie of user.ratedMovies">{{ movie.title }} - {{ movie.rating }}/10</li>
         </ul>
     </div>
+
+     <!-- Not logged in message -->
+     <ng-template #notLoggedIn>
+        <div class="not-logged-in-message">
+            <p>You are not logged in. Please <a routerLink="/user-login">log in or register</a> to view your profile.</p>
+        </div>
+    </ng-template>
 </div>
