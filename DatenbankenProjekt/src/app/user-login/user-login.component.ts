@@ -24,6 +24,12 @@ export class UserLoginComponent {
     username: '',
     password: ''
   };
+
+  isSidebarOpen = false;
+  
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
   
   // Variable zur Steuerung der Anzeige des Login-Formulars
   showLoginForm: boolean = true;

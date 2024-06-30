@@ -1,4 +1,29 @@
 <div class="form-container">
+    <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
+      <!-- Button zum Ausfahren der Sidebar -->
+      <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
+          <span></span>
+          <span></span>
+      </button>
+      
+      <!-- Navigation der Sidebar -->
+      <nav>
+          <ul>
+              <li><a routerLink="/home-page">Home</a></li>
+              <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
+              <li><a routerLink="/film-list">Film Liste</a></li>
+              <li><a routerLink="/user">User</a></li>
+          </ul>
+      </nav>      
+  </div>
+
+  <header>
+      <button class="sidebar-toggle" (click)="toggleSidebar()">
+          <span></span>
+          <span></span>
+          <span></span>
+      </button>
+  </header>
     <!-- Login Form -->
     <div *ngIf="showLoginForm" class="login-container">
       <h2>Login</h2>
