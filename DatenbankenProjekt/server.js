@@ -171,15 +171,15 @@ app.post('/api/register', function (req, res) {
     const query = "INSERT INTO nutzer (Nutzername, Email, Passwort) VALUES (?, ?, ?)";
     con.query(query, [username, email, password], function (err, results) {
         if (err) {
-            console.log("Nicht registriert")
             console.error("Error registering user:", err);
-            res.status(500).send("Registration failed.");
+            res.status(500).json({ message: "Registration failed." }); // Rückgabe im JSON-Format
         } else {
-            console.log("Registriert")
-            res.status(200).send("Registration successful.");
+            console.log("User registered successfully");
+            res.status(200).json({ message: "Registration successful." }); // Rückgabe im JSON-Format
         }
     });
 });
+
 
 // Login 
 app.post('/api/login', function (req, res) {
