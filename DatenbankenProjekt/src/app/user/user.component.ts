@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent {
+  isSidebarOpen = false;
   user = {
     vorname: 'Max Mustermann',
     geburtsdatum: '01.01.1990',
@@ -29,4 +30,10 @@ export class UserComponent {
     // Implement your create list logic here
     console.log('List created: ', this.newListName);
   }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+
 }

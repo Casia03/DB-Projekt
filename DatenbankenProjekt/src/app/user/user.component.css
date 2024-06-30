@@ -1,12 +1,118 @@
 .container {
     display: flex;
+    position: relative;
+    z-index: 100;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    padding: 20px;
-    border-radius: 30px;
-    box-sizing: border-box;
+    margin: 0;
+    color: #fff;
 }
+
+.sidebar {
+    width: 250px;
+    top: 20px;
+    height: calc(100vh - 50px); /* Verwenden Sie 100vh für die Höhe der Sidebar */
+    background-color: #333;
+    position: fixed; /* Ändern Sie die Position auf fixed */
+    left: 0;
+    z-index: 1000;
+    transition: transform 0.4s ease;
+    transform: translateX(-100%);
+}
+
+.sidebar.open {
+    transform: translateX(-3.5%);
+}
+
+.sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    padding: 10px 20px;
+    border-bottom: 1px solid #555;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar nav ul li:hover {
+    background-color: rgba(255, 255, 255, 0.233);
+}
+
+.sidebar nav ul li.film-liste a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.sidebar nav ul li.film-liste:hover {
+    background-color: transparent;
+}
+
+/* Stil für den Pfeil */
+.sidebar-toggle-arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+}
+
+.sidebar-toggle-arrow:hover {
+    background-color: rgba(255, 255, 255, 0.233);
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-toggle-arrow span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #ffffff;
+    margin: 5px 0;
+}
+
+/* Sidebar-Toggle-Stile */
+.sidebar-toggle {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.sidebar-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.233);
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #ffffff;
+    margin: 5px 0;
+}
+
+.sidebar-close {
+    position: absolute;
+    right: 10px; /* Abstand zum rechten Rand der Sidebar */
+    top: 50%; /* Zentrieren vertikal */
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}   
 
 .header {
     display: flex;
