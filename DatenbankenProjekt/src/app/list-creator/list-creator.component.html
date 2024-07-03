@@ -25,20 +25,48 @@
         </button>
     </header>
 
-    <div class="main-list">
+    <div *ngIf="showListCreation" class="main-list">
         <div class="main-list-container">
-          <div class="main-list-items">
-            <div class="list-item" *ngFor="let film of films">
-              <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
-              <div class="item-info">
-                <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
-                <p>{{film.description}}</p>
-              </div>
-              <div class="film-details"></div>
-              <input type="checkbox" [(ngModel)]="film.selected" (change)="toggleSelection(film)">
+            <!-- Bereich zum Erstellen von Listen (links) -->
+            <div class="create-list">
+                <h2>Liste erstellen</h2>
+                <form (ngSubmit)="createList()">
+                    <label>Listennamen:</label>
+                    <input type="text" [(ngModel)]="listname" name="listname" required>
+                    <button type="submit">Liste erstellen</button>
+                </form>
             </div>
-          </div>
+    
+            <!-- Bereich zur Anzeige aller Listen (rechts) -->
+            <div class="display-lists">
+                <h2>Alle Listen</h2>
+                <div *ngIf="listen.length === 0">
+                    <p>Keine Listen vorhanden.</p>
+                </div>
+                <ul *ngIf="listen.length > 0">
+                    <li *ngFor="let list of listen">
+                        <a (click)="selectList(list)">{{ list.listname }}</a>
+                        <button (click)="editList(list)">Bearbeiten</button>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <button (click)="createList()">Liste erstellen</button>
     </div>
+    
+    <div *ngIf="!showListCreation" class="main-list">
+        <div class="main-list-container">
+            <div class="main-list-items">
+                <div class="list-item" *ngFor="let film of films">
+                    <input type="checkbox" [(ngModel)]="film.selected">
+                    <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
+                    <div class="item-info">
+                        <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
+                        <p>{{film.description}}</p>
+                    </div>
+                </div>
+            </div>
+            <button (click)="addFilmsToList()">Filme zur Liste hinzufügen</button>
+            <button (click)="toggleView()">Zurück zu Listen</button>
+        </div>
+    </div>    
 </div>

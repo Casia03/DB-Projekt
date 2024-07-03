@@ -4,13 +4,13 @@ var app = express();                               // create our app w/ express
 var path = require('path');
 var mysql = require('mysql2');
 var bodyParser = require('body-parser');
-// const jwt = require('jsonwebtoken'); // fur tokens damit die user session nicht nach einem einfachen refresh verloren geht, implementiere spaeter
+const jwt = require('jsonwebtoken'); // fur tokens damit die user session nicht nach einem einfachen refresh verloren geht, implementiere spaeter
 
 const con = mysql.createConnection({
     database: "sakila",
     host: "localhost",
     user: "root",
-    password: "vNikopolidis"
+    password: "aamijnawssh123"
 });
 
 // support parsing of application/json type post data
@@ -112,6 +112,7 @@ app.get('/api/films/year/:year', function (req, res) {
         }
     });
 });
+
 //Filme von Jahr bis Jahr
 app.get('/api/films/year-range/:startYear/:endYear', function (req, res) {
     const startYear = req.params.startYear;
@@ -165,6 +166,71 @@ app.get('/api/films/rating/:rating', function (req, res) {
     });
 });
 
+// Erstellen von Filmlisten
+app.post('/api/list-creator/create', function (req, res) {
+
+    // if (!req.session.userID) {
+    //     return res.status(401).json({ message: "Unauthorized." });
+    // }
+
+    const { listname } = req.body;
+    const userID = 1; // Feste NutzerID für Testzwecke
+    const query = "INSERT INTO liste (Listenname, NutzerID) VALUES (?, ?)";
+    con.query(query, [listname, userID], function (err, results) {
+        if (err) {
+            console.error("Error creating list:", err);
+            res.status(500).json({ message: "List creation failed." });
+        } else {
+            console.log("List created successfully");
+            res.status(200).json({ list_id: results.insertId, message: "List created successfully." });
+        }
+    });
+});
+
+// Lade die Listen der Eingeloggte Nutzers
+app.get('/api/user-lists', function (req, res) {
+    //const userID = req.session.userID; // NutzerID aus der Session holen
+    
+    //if (!userID) {
+    //    return res.status(401).json({ message: "Unauthorized." });
+    //}
+    
+    const userID = 1; // Feste NutzerID für Testzwecke
+    const query = "SELECT * FROM liste WHERE NutzerID = ?";
+    con.query(query, [userID], function (err, results) {
+        if (err) {
+            console.error("Error fetching user lists:", err);
+            res.status(500).json({ message: "Failed to fetch user lists." });
+        } else {
+            res.status(200).json(results);
+        }
+    });
+});
+
+// Filme zur Liste hinzufügen
+app.post('/api/list-creator/add-films', function (req, res) {
+    const { listId, filmIds } = req.body;
+
+    if (!listId || !Array.isArray(filmIds)) {
+        console.error("Invalid input data:", { listId, filmIds });
+        return res.status(400).json({ message: "Invalid input data." });
+    }
+
+    // Konvertiere die filmIds zu SMALLINT, falls erforderlich
+    const values = filmIds.map(filmId => [listId, parseInt(filmId)]);
+
+    const query = "INSERT INTO listenfilme (ListenID, film_id) VALUES ?";
+    con.query(query, [values], function (err, results) {
+        if (err) {
+            console.error("Error adding films to list:", err);
+            res.status(500).json({ message: "Failed to add films to list." });
+        } else {
+            console.log("Films added to list successfully");
+            res.status(200).json({ message: "Films added to list successfully." });
+        }
+    });
+});
+
 // Registration 
 app.post('/api/register', function (req, res) {
     const { username, email, password } = req.body;
@@ -180,8 +246,7 @@ app.post('/api/register', function (req, res) {
     });
 });
 
-
-// Login 
+// Login
 app.post('/api/login', function (req, res) {
     const { username, password } = req.body;
     const query = "SELECT * FROM nutzer WHERE Nutzername = ? AND Passwort = ?";
@@ -199,6 +264,7 @@ app.post('/api/login', function (req, res) {
         }
     });
 });
+
 
 // // fur tokens
 // app.post('/api/login', (req, res) => {

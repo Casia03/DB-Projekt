@@ -1,65 +1,64 @@
 <div class="form-container">
     <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
-      <!-- Button zum Ausfahren der Sidebar -->
-      <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
-          <span></span>
-          <span></span>
-      </button>
-      
-      <!-- Navigation der Sidebar -->
-      <nav>
-          <ul>
-              <li><a routerLink="/home-page">Home</a></li>
-              <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
-              <li><a routerLink="/film-list">Film Liste</a></li>
-              <li><a routerLink="/user">User</a></li>
-          </ul>
-      </nav>      
-  </div>
+        <!-- Button zum Ausfahren der Sidebar -->
+        <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+        </button>
 
-  <header>
-      <button class="sidebar-toggle" (click)="toggleSidebar()">
-          <span></span>
-          <span></span>
-          <span></span>
-      </button>
-  </header>
+        <!-- Navigation der Sidebar -->
+        <nav>
+            <ul>
+                <li><a routerLink="/home-page">Home</a></li>
+                <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
+                <li><a routerLink="/film-list">Film Liste</a></li>
+                <li><a routerLink="/user">User</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <header>
+        <button class="sidebar-toggle" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
     <!-- Login Form -->
     <div *ngIf="showLoginForm" class="login-container">
-      <h2>Login</h2>
-      <div class="form-group">
-        <label for="login-username">Username:</label>
-        <input type="text" id="login-username" name="username" [(ngModel)]="loginObj.username">
-      </div>
-      <div class="form-group">
-        <label for="login-password">Password:</label>
-        <input type="password" id="login-password" name="password" [(ngModel)]="loginObj.password">
-      </div>
-      <div class="button-group">
-        <button class="toggle-button" (click)="toggleForm()">Go to Register</button>
-        <button (click)="onLogin()">Login</button>
-      </div>
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="login-username">Username:</label>
+            <input type="text" id="login-username" name="username" [(ngModel)]="loginObj.username">
+        </div>
+        <div class="form-group">
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" name="password" [(ngModel)]="loginObj.password">
+        </div>
+        <div class="button-group">
+            <button class="toggle-button" (click)="toggleForm()">Go to Register</button>
+            <button (click)="onLogin()">Login</button>
+        </div>
     </div>
-  
+
     <!-- Register Form -->
     <div *ngIf="!showLoginForm" class="register-container">
-      <h2>Register</h2>
-      <div class="form-group">
-        <label for="register-username">Username:</label>
-        <input type="text" id="register-username" [(ngModel)]="signupObj.username">
-      </div>
-      <div class="form-group">
-        <label for="register-email">Email:</label>
-        <input type="email" id="register-email" [(ngModel)]="signupObj.email">
-      </div>
-      <div class="form-group">
-        <label for="register-password">Password:</label>
-        <input type="password" id="register-password" [(ngModel)]="signupObj.password">
-      </div>
-      <div class="button-group">
-        <button class="toggle-button" (click)="toggleForm()">Go to Login</button>
-        <button (click)="onSignUp()">Register</button>
-      </div>
+        <h2>Register</h2>
+        <div class="form-group">
+            <label for="register-username">Username:</label>
+            <input type="text" id="register-username" [(ngModel)]="signupObj.username">
+        </div>
+        <div class="form-group">
+            <label for="register-email">Email:</label>
+            <input type="email" id="register-email" [(ngModel)]="signupObj.email">
+        </div>
+        <div class="form-group">
+            <label for="register-password">Password:</label>
+            <input type="password" id="register-password" [(ngModel)]="signupObj.password">
+        </div>
+        <div class="button-group">
+            <button class="toggle-button" (click)="toggleForm()">Go to Login</button>
+            <button (click)="onSignUp()">Register</button>
+        </div>
     </div>
-  </div>
-  
+</div>
