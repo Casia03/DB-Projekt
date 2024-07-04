@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
+        <!-- Button zum Ausfahren der Sidebar -->
+        <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- Navigation der Sidebar -->
+        <nav>
+            <ul>
+                <li routerLink="/home-page"><a routerLink="/home-page">Home</a></li>
+                <li class="film-liste"><a>Film Liste</a></li>
+                <li routerLink="/list-creator"><a routerLink="/list-creator">Listen erstellen</a></li>
+                <li routerLink="/user"><a routerLink="/user">User</a></li>
+                <li routerLink="/user-login"><a routerLink="/user-login">Registrieren/Einlogen</a></li>
+            </ul>
+        </nav>      
+    </div>
+
+    <header>
+        <button class="sidebar-toggle" (click)="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <div class="main-list">
+        <div class="main-list-container">
+            <div class="main-list-items">
+                <div class="list-item" *ngFor="let film of films">
+                    <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
+                    <div class="item-info">
+                        <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
+                        <p>{{film.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

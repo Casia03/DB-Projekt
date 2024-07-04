@@ -12,6 +12,7 @@ import { FilmListComponent } from './film-list/film-list.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { ListCreatorComponent } from './list-creator/list-creator.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { ListListenComponent } from './list-listen/list-listen.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { DialogComponent } from './dialog/dialog.component';
     FilmListComponent,
     UserLoginComponent,
     ListCreatorComponent,
-    DialogComponent
+    DialogComponent,
+    ListListenComponent
   ],
   imports: [
     BrowserModule,
