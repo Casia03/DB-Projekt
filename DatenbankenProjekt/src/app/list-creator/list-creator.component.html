@@ -9,10 +9,12 @@
         <!-- Navigation der Sidebar -->
         <nav>
             <ul>
-                <li><a routerLink="/home-page">Home</a></li>
-                <li><a routerLink="/user-login">Registrieren/Einlogen</a></li>
-                <li class="film-liste"><a>Film Liste</a></li>
-                <li><a routerLink="/user">User</a></li>
+                <li routerLink="/home-page"><a routerLink="/home-page">Home</a></li>
+                <li routerLink="/film-list"><a routerLink="/film-list">Film Liste</a></li>
+                <li class="list-creator"><a>Listen erstellen</a></li>
+                <li routerLink="/user"><a routerLink="/user">User</a></li>
+                <li routerLink="/user-login"><a routerLink="/user-login">Registrieren/Einlogen</a></li>
+
             </ul>
         </nav>
     </div>
@@ -47,6 +49,7 @@
                     <li *ngFor="let list of listen">
                         <a (click)="selectList(list)">{{ list.listname }}</a>
                         <button (click)="editList(list)">Bearbeiten</button>
+                        <button (click)="deleteList(list)">Löschen</button>
                     </li>
                 </ul>
             </div>
@@ -57,12 +60,13 @@
         <div class="main-list-container">
             <div class="main-list-items">
                 <div class="list-item" *ngFor="let film of films">
-                    <input type="checkbox" [(ngModel)]="film.selected">
+                    <input type="checkbox" [(ngModel)]="film.selected" *ngIf="!film.inCurrentList">
                     <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
                     <div class="item-info">
                         <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
-                        <p>{{film.description}}</p>
+                        <p>{{ film.description }}</p>
                     </div>
+                    <button *ngIf="film.inCurrentList" (click)="removeFilmFromList(film)">Aus Liste entfernen</button>
                 </div>
             </div>
             <button (click)="addFilmsToList()">Filme zur Liste hinzufügen</button>

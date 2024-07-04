@@ -175,14 +175,14 @@ app.post('/api/list-creator/create', function (req, res) {
 
     const { listname } = req.body;
     const userID = 1; // Feste NutzerID für Testzwecke
-    const query = "INSERT INTO liste (Listenname, NutzerID) VALUES (?, ?)";
+    const query = "INSERT INTO liste (listname, NutzerID) VALUES (?, ?)";
     con.query(query, [listname, userID], function (err, results) {
         if (err) {
             console.error("Error creating list:", err);
             res.status(500).json({ message: "List creation failed." });
         } else {
             console.log("List created successfully");
-            res.status(200).json({ list_id: results.insertId, message: "List created successfully." });
+            res.status(200).json({ ListenID: results.insertId, message: "List created successfully." });
         }
     });
 });
@@ -230,6 +230,60 @@ app.post('/api/list-creator/add-films', function (req, res) {
         }
     });
 });
+
+// Liste löschen
+app.delete('/api/list-creator/delete/:listId', function (req, res) {
+    const listId = req.params.listId;
+    const query = "DELETE FROM liste WHERE ListenID = ?";
+
+    con.query(query, [listId], function (err, results) {
+        if (err) {
+            console.error("Error deleting list:", err);
+            res.status(500).json({ message: "Failed to delete list." });
+        } else {
+            res.status(200).json({ message: "List deleted successfully." });
+        }
+    });
+});
+
+// Film aus Liste entfernen
+app.post('/api/list-creator/remove-film', function (req, res) {
+    const { listId, filmId } = req.body;
+    const query = "DELETE FROM listenfilme WHERE ListenID = ? AND film_id = ?";
+
+    con.query(query, [listId, filmId], function (err, results) {
+        if (err) {
+            console.error("Error removing film from list:", err);
+            res.status(500).json({ message: "Failed to remove film from list." });
+        } else {
+            res.status(200).json({ message: "Film removed from list successfully." });
+        }
+    });
+});
+
+// Filme einer Liste abrufen
+app.get('/api/list-creator/list-films/:listId', function (req, res) {
+    const listId = req.params.listId;
+    const query = `
+        SELECT film.film_id, film.title, film.description, image.link AS image_link
+        FROM film
+        JOIN listenfilme ON film.film_id = listenfilme.film_id
+        LEFT JOIN image ON film.image_nr = image.image_id
+        WHERE listenfilme.ListenID = ?
+    `;
+
+    con.query(query, [listId], function (err, results) {
+        if (err) {
+            console.error("Error fetching films in list:", err);
+            res.status(500).json({ message: "Failed to fetch films in list." });
+        } else {
+            res.status(200).json(results);
+        }
+    });
+});
+
+
+
 
 // Registration 
 app.post('/api/register', function (req, res) {

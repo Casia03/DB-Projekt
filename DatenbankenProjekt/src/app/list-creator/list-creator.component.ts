@@ -7,6 +7,7 @@ export class Film {
     description: string;
     image_link: string;
     selected: boolean = false;
+    inCurrentList: boolean = false;
 
     constructor(film_id: number, title: string, description: string, image_link: string) {
         this.film_id = film_id;
@@ -16,12 +17,13 @@ export class Film {
     }
 }
 
+
 export class List {
-    list_id: number;
+    ListenID: number;
     listname: string;
 
-    constructor(list_id: number, listname: string) {
-        this.list_id = list_id;
+    constructor(ListenID: number, listname: string) {
+        this.ListenID = ListenID;
         this.listname = listname;
     }
 }
@@ -78,7 +80,7 @@ export class ListCreatorComponent implements OnInit {
             this.http.post('/api/list-creator/create', body).subscribe(
                 (response: any) => {
                     console.log("List created successfully:", response);
-                    const newList = new List(response.list_id, this.listname);
+                    const newList = new List(response.ListenID, this.listname);
                     this.listen.push(newList);
                     this.listname = '';
                 },
@@ -92,7 +94,26 @@ export class ListCreatorComponent implements OnInit {
     selectList(list: List): void {
         this.selectedList = list;
         this.showListCreation = false;
+        this.getFilmsInList(list.ListenID);
     }
+
+    getFilmsInList(listId: number): void {
+        const url = `/api/list-creator/list-films/${listId}`;
+        this.http.get<Film[]>(url).subscribe(
+            (data: Film[]) => {
+                this.films.forEach(film => {
+                    film.inCurrentList = data.some(f => f.film_id === film.film_id);
+                    if (film.inCurrentList) {
+                        film.selected = false; // Checkbox nicht ausgewählt, wenn der Film bereits in der Liste ist
+                    }
+                });
+            },
+            (error: HttpErrorResponse) => {
+                this.handleHttpError('Error fetching films in list', error);
+            }
+        );
+    }
+    
 
     editList(list: List): void {
         this.selectList(list);
@@ -103,19 +124,61 @@ export class ListCreatorComponent implements OnInit {
             console.error("No list selected");
             return;
         }
+    
+        const selectedFilmIds = this.films.filter(film => film.selected && !film.inCurrentList).map(film => film.film_id);
+        const body = { listId: this.selectedList.ListenID, filmIds: selectedFilmIds };
+    
+        if (this.selectedList.ListenID !== undefined) {
+            this.http.post('/api/list-creator/add-films', body).subscribe(
+                (response: any) => {
+                    console.log("Films added to list successfully:", response);
+                    //this.getFilmsInList(this.selectedList.ListenID); // Sicherstellen, dass ListenID definiert ist
+                },
+                (error: HttpErrorResponse) => {
+                    this.handleHttpError('Error adding films to list', error);
+                }
+            );
+        }
+    }
+    
+    removeFilmFromList(film: Film): void {
+        if (!this.selectedList) {
+            console.error("No list selected");
+            return;
+        }
 
-        const selectedFilmIds = this.films.filter(film => film.selected).map(film => film.film_id);
-        const body = { listId: this.selectedList.list_id, filmIds: selectedFilmIds };
+        const body = { listId: this.selectedList.ListenID, filmId: film.film_id };
 
-        this.http.post('/api/list-creator/add-films', body).subscribe(
+        this.http.post('/api/list-creator/remove-film', body).subscribe(
             (response: any) => {
-                console.log("Films added to list successfully:", response);
+                console.log("Film removed from list successfully:", response);
+                film.inCurrentList = false;
+                film.selected = false;
             },
             (error: HttpErrorResponse) => {
-                this.handleHttpError('Error adding films to list', error);
+                this.handleHttpError('Error removing film from list', error);
             }
         );
     }
+    
+
+    deleteList(list: List): void {
+        const url = `/api/list-creator/delete/${list.ListenID}`;
+        this.http.delete(url).subscribe(
+            (response: any) => {
+                console.log("List deleted successfully:", response);
+                this.listen = this.listen.filter(l => l.ListenID !== list.ListenID);
+                if (this.selectedList?.ListenID === list.ListenID) {
+                    this.selectedList = null;
+                    this.toggleView();
+                }
+            },
+            (error: HttpErrorResponse) => {
+                this.handleHttpError('Error deleting list', error);
+            }
+        );
+    }
+    
 
     toggleView(): void {
         this.showListCreation = !this.showListCreation;
@@ -125,33 +188,3 @@ export class ListCreatorComponent implements OnInit {
         console.error(message, error);
     }
 }
-
-
-    /*
-      toggleSelection(film: Film): void {
-        film.selected = !film.selected;
-      }
-    
-      createList(): void {
-        const selectedFilms = this.films.filter(film => film.selected);
-        // Now you can send the selectedFilms array to your backend or perform any other operations
-      }
-    
-      saveList(listName: string): void {
-        const selectedFilms = this.films.filter(film => film.selected);
-        const newList = {
-          name: listName,
-          films: selectedFilms.map(film => film.film_id) // Only store film IDs in the user list
-        };
-        this.userLists.push(newList);
-    
-        // Send the newList object to your backend API to save it in the MySQL table
-        this.http.post('', newList).subscribe(
-          (response: any) => {
-            console.log('User list saved successfully:', response);
-          },
-          (error: HttpErrorResponse) => {
-            console.error('Error saving user list:', error);
-          }
-        );
-      }*/
