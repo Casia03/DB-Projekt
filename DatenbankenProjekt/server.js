@@ -40,26 +40,43 @@ app.get('/home-page', function (req, res) {
 //Ein Film
 app.get('/film/:id', function (req, res) {
     const filmId = req.params.id;
-    const query = `
+    const filmQuery = `
         SELECT film.*, image.link AS image_link
         FROM film
         LEFT JOIN image ON film.image_nr = image.image_id
         WHERE film.film_id = ?
     `;
 
-    con.query(query, [filmId], function (err, results) {
+    const categoryQuery = `
+        SELECT category.name
+        FROM category
+        JOIN film_category ON category.category_id = film_category.category_id
+        WHERE film_category.film_id = ?
+    `;
+
+    con.query(filmQuery, [filmId], function (err, filmResults) {
         if (err) {
             console.error("Error fetching film:", err);
             res.status(500).send("Error fetching film");
-        } else if (results.length > 0) {
-            const film = results[0];
+        } else if (filmResults.length > 0) {
+            const film = filmResults[0];
             film.image_url = film.image_link ? `/assets/pictures/${film.image_link}` : `/assets/pictures/default.jpg`;
-            res.send(film);
+
+            con.query(categoryQuery, [filmId], function (err, categoryResults) {
+                if (err) {
+                    console.error("Error fetching film categories:", err);
+                    res.status(500).send("Error fetching film categories");
+                } else {
+                    film.categories = categoryResults.map(category => category.name);
+                    res.send(film);
+                }
+            });
         } else {
             res.status(404).send("Film not found");
         }
     });
 });
+
 
 // Alle Filme
 app.get('/film-list', function (req, res) {
@@ -165,6 +182,36 @@ app.get('/api/films/rating/:rating', function (req, res) {
         }
     });
 });
+
+// Filme nach Kategorie
+app.get('/api/films/category/:categoryId', function (req, res) {
+    const categoryId = req.params.categoryId;
+    const query = `
+        SELECT film.*, image.link AS image_link
+        FROM film
+        LEFT JOIN image ON film.image_nr = image.image_id
+        INNER JOIN film_category ON film.film_id = film_category.film_id
+        WHERE film_category.category_id = ?
+    `;
+
+    con.query(query, [categoryId], function (err, results) {
+        if (err) {
+            console.error("Error fetching films by category:", err);
+            res.status(500).send("Error fetching films by category");
+        } else {
+            results.forEach(film => {
+                if (film.image_link) {
+                    film.image_url = `/assets/pictures/${film.image_link}`;
+                } else {
+                    film.image_url = `/assets/pictures/default.jpg`; // Fallback for no image
+                }
+            });
+
+            res.send(results);
+        }
+    });
+});
+
 
 // Erstellen von Filmlisten
 app.post('/api/list-creator/create', function (req, res) {

@@ -27,6 +27,8 @@ export class FilmListComponent implements OnInit {
         this.route.paramMap.subscribe(params => {
             const year = params.get('year');
             const rating = params.get('rating');
+            const categoryId = params.get('categoryId');
+            
             if (year) {
                 if (year.includes('-')) {
                     const [startYear, endYear] = year.split('-');
@@ -36,6 +38,8 @@ export class FilmListComponent implements OnInit {
                 }
             } else if (rating) {
                 this.getFilmsByRating(rating);
+            } else if (categoryId) {
+                this.getFilmsByCategory(parseInt(categoryId));
             } else {
                 this.getAllFilms();
             }
@@ -90,8 +94,18 @@ export class FilmListComponent implements OnInit {
         );
     }
 
+    getFilmsByCategory(categoryId: number) {
+        this.http.get<Film[]>(`/api/films/category/${categoryId}`).subscribe(
+            (data: Film[]) => {
+                this.films = data;
+            },
+            (error: HttpErrorResponse) => {
+                this.handleHttpError(`Error fetching films for category ${categoryId}`, error);
+            }
+        );
+    }
+
     private handleHttpError(message: string, error: HttpErrorResponse): void {
         console.error(message, error);
-        // Hier kannst du zusätzliche Logik zur Fehlerbehandlung einfügen, z.B. Benachrichtigungen an den Benutzer
     }
 }

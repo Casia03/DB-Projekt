@@ -44,11 +44,24 @@
                     <button id="nextButton" (click)="nextPage()">Weiter</button>
                 </div>
             </section>
+
+            <section class="popular-categories">
+                <h2>Beliebte Kategorien</h2>
+                <div class="category-buttons">
+                    <button (click)="navigateToFilmList('Action')">Action</button>
+                    <button (click)="navigateToFilmList('Comedy')">Komödie</button>
+                    <button (click)="navigateToFilmList('Drama')">Drama</button>
+                    <button (click)="navigateToFilmList('Sci Fi')">Science Fiction</button>
+                    <button (click)="navigateToFilmList('Horror')">Horror</button>
+                </div>
+            </section>
+
             <section class="about-us">
                 <h2>Über uns</h2>
                 <p>CineScoreHub ermöglicht es Ihnen, Filmlisten zu erstellen.</p>
             </section>
         </main>
+
         <footer>
             <p>&copy; 2024 CineScoreHub. Alle Rechte vorbehalten.</p>
         </footer>

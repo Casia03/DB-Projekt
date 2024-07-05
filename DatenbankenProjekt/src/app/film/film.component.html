@@ -5,7 +5,7 @@
             <span></span>
             <span></span>
         </button>
-        
+
         <!-- Navigation der Sidebar -->
         <nav>
             <ul>
@@ -15,7 +15,7 @@
                 <li routerLink="/user"><a routerLink="/user">User</a></li>
                 <li routerLink="/user-login"><a routerLink="/user-login">Registrieren/Einlogen</a></li>
             </ul>
-        </nav>      
+        </nav>
     </div>
 
     <header>
@@ -25,28 +25,24 @@
             <span></span>
         </button>
     </header>
-  
+
     <div class="main-list">
-      <div class="main-list-container">
-        <div class="list-item">
-          <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
-          <div class="item-info">
-            <h3>{{ film.title }}</h3>
-            <p>{{ film.description }}</p>
-            <!-- Hier könnten weitere Filmdetails rein -->
-            <div class="film-details">
-              <div class="circle">
-              <span>{{ film.release_year }}</span>
-              </div>
-              <div class="circle">
-                <span>rating:</span>
-                <span>{{ film.rating }}</span>
-              </div>
-              <div class="circle">
-                <span>{{ film.length }}</span>
-              </div>
-
-          </div>
-
-
-  
+        <div class="main-list-container">
+            <div class="list-item">
+                <img [src]="film.image_url" alt="{{ film.title }}">
+                <div class="item-info">
+                    <h3>{{ film.title }}</h3>
+                    <div class="film-details item-tags">
+                        <span>{{ film.release_year }}</span>
+                        <span>Rating: {{ film.rating }}</span>
+                        <span>Length: {{ film.length }}</span>
+                    </div>
+                    <p>{{ film.description }}</p>
+                    <div class="item-tags">
+                        <span *ngFor="let category of film.categories" class="category-badge">{{ category }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
