@@ -6,6 +6,7 @@ interface liste {
   ListenID: number;
   listname: string;
   NutzerID: number;
+  Nutzername: string;
   // Weitere Eigenschaften hier rein
 }
 

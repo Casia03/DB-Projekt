@@ -32,8 +32,7 @@
                 <div class="list-item" *ngFor="let liste of listen">
                     <div class="item-info">
                         <h3><a [routerLink]="['/film-list', liste.ListenID]">{{ liste.listname }}</a></h3>
-                        <!--><p>{{liste.description}}</p></!-->
-                        <!-->für kevin</!-->
+                        <p>Nutzer: {{liste.Nutzername}}</p>
                     </div>
                 </div>
             </div>
