@@ -239,6 +239,7 @@ main {
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+    border-radius: 3px;
 }
 
 .pagination-buttons button:hover {
@@ -275,10 +276,14 @@ main {
 
 /* Footer-Stile */
 footer {
+    position: fixed; /* Position auf fixed setzen */
+    
+    bottom: 0;
+    width: 95%; /* Volle Breite */
     text-align: center;
     padding: 20px;
-    background: linear-gradient(to bottom, #444, #000000); /* Gradient von Blau nach Lila */
-    color: #fff; /* Textfarbe auf Weiß */
+    background: linear-gradient(to bottom, #444, #000000);
+    color: #fff;
     border-radius: 5px;
 }
 
