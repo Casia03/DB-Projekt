@@ -20,6 +20,7 @@ const routes: Routes = [
   { path: 'film-list/year/:startYear/:endYear', component: FilmListComponent }, // Route für Filme nach Jahrbereich
   { path: 'film-list/rating/:rating', component: FilmListComponent },
   { path: 'film-list/category/:categoryId', component: FilmListComponent },
+  { path: 'film-list/:ListenID', component: FilmListComponent },
   { path: 'user-login', component: UserLoginComponent },
   { path: 'list-creator', component: ListCreatorComponent },
   { path: 'list-listen', component: ListListenComponent },

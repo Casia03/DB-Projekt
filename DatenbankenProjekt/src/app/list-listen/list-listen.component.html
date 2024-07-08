@@ -29,11 +29,10 @@
     <div class="main-list">
         <div class="main-list-container">
             <div class="main-list-items">
-                <div class="list-item" *ngFor="let film of films">
-                    <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
+                <div class="list-item" *ngFor="let liste of listen">
                     <div class="item-info">
-                        <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
-                        <p>{{film.description}}</p>
+                        <h3><a [routerLink]="['/film-list', liste.ListenID]">{{ liste.listname }}</a></h3>
+                        <!--><p>{{liste.description}}</p></!-->
                     </div>
                 </div>
             </div>

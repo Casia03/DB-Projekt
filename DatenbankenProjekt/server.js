@@ -366,6 +366,42 @@ app.post('/api/login', function (req, res) {
     });
 });
 
+app.get('/api/listen', function (req, res) {
+    const query = `
+        SELECT liste.* from liste
+    `;
+
+    con.query(query, function (err, results) {
+        if (err) {
+            console.error("Error fetching list:", err);
+            res.status(500).send("Error fetching list");
+        } else {
+            
+            res.send(results);
+        }
+    });
+});
+
+app.get('/api/listeninhalt/:ListenID', function (req, res) {
+    const ListenID = req.params.ListenID;
+    const query = ` SELECT film.*, image.link AS image_link from film 
+
+        INNER JOIN listenfilme ON film.film_id = listenfilme.film_id
+        LEFT JOIN image ON film.image_nr = image.image_id
+        WHERE listenfilme.ListenID =?
+    `;
+
+    con.query(query,[ListenID], function (err, results) {
+        if (err) {
+            console.error("Error fetching list:", err);
+            res.status(500).send("Error fetching list");
+        } else {
+            
+            res.send(results);
+        }
+    });
+});
+
 
 // // fur tokens
 // app.post('/api/login', (req, res) => {

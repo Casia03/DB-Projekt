@@ -28,6 +28,7 @@ export class FilmListComponent implements OnInit {
             const year = params.get('year');
             const rating = params.get('rating');
             const categoryId = params.get('categoryId');
+            const ListenID = params.get('ListenID');
             
             if (year) {
                 if (year.includes('-')) {
@@ -39,7 +40,9 @@ export class FilmListComponent implements OnInit {
             } else if (rating) {
                 this.getFilmsByRating(rating);
             } else if (categoryId) {
-                this.getFilmsByCategory(parseInt(categoryId));
+                this.getFilmsByCategory(parseInt(categoryId));     
+            } else if (ListenID) {
+                this.getFilmsByListe(parseInt(ListenID));
             } else {
                 this.getAllFilms();
             }
@@ -101,6 +104,16 @@ export class FilmListComponent implements OnInit {
             },
             (error: HttpErrorResponse) => {
                 this.handleHttpError(`Error fetching films for category ${categoryId}`, error);
+            }
+        );
+    }
+    getFilmsByListe(ListenID: number) {
+        this.http.get<Film[]>(`/api/listeninhalt/${ListenID}`).subscribe(
+            (data: Film[]) => {
+                this.films = data;
+            },
+            (error: HttpErrorResponse) => {
+                this.handleHttpError(`Error fetching films for category ${ListenID}`, error);
             }
         );
     }

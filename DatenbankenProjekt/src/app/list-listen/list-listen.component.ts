@@ -2,13 +2,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-interface Film {
-  film_id: number;
-  title: string;
-  description: string;
-  release_year: number;
-  image_link: string;
-  image_url?: string;
+interface liste {
+  ListenID: number;
+  listname: string;
+  NutzerID: number;
   // Weitere Eigenschaften hier rein
 }
 
@@ -19,27 +16,14 @@ interface Film {
 })
 export class ListListenComponent {
   isSidebarOpen = false;
-  films: Film[] = [];
+  listen: liste[] = [];
 
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-      this.route.paramMap.subscribe(params => {
-          const year = params.get('year');
-          const rating = params.get('rating');
-          if (year) {
-              if (year.includes('-')) {
-                  const [startYear, endYear] = year.split('-');
-                  this.getFilmsByYearRange(parseInt(startYear), parseInt(endYear));
-              } else {
-                  this.getFilmsByYear(parseInt(year));
-              }
-          } else if (rating) {
-              this.getFilmsByRating(rating);
-          } else {
-              this.getAllFilms();
-          }
-      });
+      
+          this.getAllFilms();
+  
   }
 
   toggleSidebar() {
@@ -47,48 +31,16 @@ export class ListListenComponent {
   }
 
   getAllFilms() {
-      this.http.get<Film[]>('/film-list').subscribe(
-          (data: Film[]) => {
-              this.films = data;
+      this.http.get<liste[]>('/api/listen').subscribe(
+          (data: liste[]) => {
+              this.listen = data;
           },
           (error: HttpErrorResponse) => {
-              this.handleHttpError('Error fetching all films', error);
+              this.handleHttpError('Error fetching all list', error);
           }
       );
   }
 
-  getFilmsByYear(year: number) {
-      this.http.get<Film[]>(`/api/films/year/${year}`).subscribe(
-          (data: Film[]) => {
-              this.films = data;
-          },
-          (error: HttpErrorResponse) => {
-              this.handleHttpError(`Error fetching films for year ${year}`, error);
-          }
-      );
-  }
-
-  getFilmsByYearRange(startYear: number, endYear: number) {
-      this.http.get<Film[]>(`/api/films/year-range/${startYear}/${endYear}`).subscribe(
-          (data: Film[]) => {
-              this.films = data;
-          },
-          (error: HttpErrorResponse) => {
-              this.handleHttpError(`Error fetching films for year range ${startYear}-${endYear}`, error);
-          }
-      );
-  }
-
-  getFilmsByRating(rating: string) {
-      this.http.get<Film[]>(`/api/films/rating/${rating}`).subscribe(
-          (data: Film[]) => {
-              this.films = data;
-          },
-          (error: HttpErrorResponse) => {
-              this.handleHttpError(`Error fetching films for rating ${rating}`, error);
-          }
-      );
-  }
 
   private handleHttpError(message: string, error: HttpErrorResponse): void {
       console.error(message, error);
