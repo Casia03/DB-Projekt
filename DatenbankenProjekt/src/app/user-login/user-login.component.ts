@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -66,18 +66,29 @@ export class UserLoginComponent {
   }
 
   // Methode zum Einloggen eines Benutzers
-  onLogin() {
-    this.http.post('/api/login', this.loginObj) // POST-Anfrage an die Login-API
-      .subscribe(response => {
-        this.showDialog('Login Successful', 'You have logged in successfully.'); // Erfolgsdialog anzeigen
-        // Login-Erfolg behandeln (z.B. Token speichern, Weiterleitung)
-        this.authService.login('dummyToken'); // Ersetzen durch die tatsächliche Token-Logik
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/user'; // Rücksprung-URL ermitteln
-        this.router.navigate([returnUrl]); // Navigation zur Rücksprung-URL
-      }, error => {
-        this.showDialog('Login Failed', 'Invalid username or password.'); // Fehlerdialog anzeigen
-      });
-  }
+ // Method to log in a user
+// Method to log in a user
+onLogin() {
+  this.http.post('/api/login', this.loginObj) // POST request to login API
+      .subscribe(
+          (response: any) => {
+              this.showDialog('Login Successful', 'You have logged in successfully.'); // Show success dialog
+              
+              // Token from server response
+              const token = response.token;
+              
+              // Store the token using AuthService
+              this.authService.login(token);
+              
+              const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/user'; // Get return URL
+              this.router.navigate([returnUrl]); // Navigate to return URL
+          },
+          (error) => {
+              this.showDialog('Login Failed', 'Invalid username or password.'); // Show error dialog
+          }
+      );
+}
+
 
   // Methode zum Anzeigen eines Dialogs
   showDialog(title: string, message: string): void {

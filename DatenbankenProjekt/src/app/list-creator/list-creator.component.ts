@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 export class Film {
@@ -16,7 +16,6 @@ export class Film {
         this.image_link = image_link;
     }
 }
-
 
 export class List {
     ListenID: number;
@@ -40,6 +39,7 @@ export class ListCreatorComponent implements OnInit {
     listname: string = '';
     selectedList: List | null = null;
     showListCreation = true;
+    authService: any;
 
     constructor(private http: HttpClient) { }
 
@@ -73,11 +73,14 @@ export class ListCreatorComponent implements OnInit {
             }
         );
     }
-
+    
     createList(): void {
+        const token = this.authService.getToken();
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
         if (this.listname.trim() !== '') {
             const body = { listname: this.listname };
-            this.http.post('/api/list-creator/create', body).subscribe(
+            this.http.post('/api/list-creator/create', body, { headers }).subscribe(
                 (response: any) => {
                     console.log("List created successfully:", response);
                     const newList = new List(response.ListenID, this.listname);
@@ -90,6 +93,7 @@ export class ListCreatorComponent implements OnInit {
             );
         }
     }
+    
 
     selectList(list: List): void {
         this.selectedList = list;
@@ -114,7 +118,6 @@ export class ListCreatorComponent implements OnInit {
         );
     }
     
-
     editList(list: List): void {
         this.selectList(list);
     }
@@ -161,7 +164,6 @@ export class ListCreatorComponent implements OnInit {
         );
     }
     
-
     deleteList(list: List): void {
         const url = `/api/list-creator/delete/${list.ListenID}`;
         this.http.delete(url).subscribe(

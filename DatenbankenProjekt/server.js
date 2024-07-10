@@ -10,7 +10,7 @@ const con = mysql.createConnection({
     database: "sakila",
     host: "localhost",
     user: "root",
-    password: "1231"
+    password: "123451"
 });
 
 // support parsing of application/json type post data
@@ -213,15 +213,11 @@ app.get('/api/films/category/:categoryId', function (req, res) {
 });
 
 
-// Erstellen von Filmlisten
-app.post('/api/list-creator/create', function (req, res) {
-
-    // if (!req.session.userID) {
-    //     return res.status(401).json({ message: "Unauthorized." });
-    // }
-
+// Erstellen von Filmlisten (protected route)
+app.post('/api/list-creator/create', verifyToken, function (req, res) {
     const { listname } = req.body;
-    const userID = 1; // Feste NutzerID für Testzwecke
+    const userID = req.user.id; // Get user ID from token
+
     const query = "INSERT INTO liste (listname, NutzerID) VALUES (?, ?)";
     con.query(query, [listname, userID], function (err, results) {
         if (err) {
@@ -234,15 +230,10 @@ app.post('/api/list-creator/create', function (req, res) {
     });
 });
 
-// Lade die Listen der Eingeloggte Nutzers
-app.get('/api/user-lists', function (req, res) {
-    //const userID = req.session.userID; // NutzerID aus der Session holen
+// Lade die Listen der Eingeloggte Nutzers (protected route)
+app.get('/api/user-lists', verifyToken, function (req, res) {
+    const userID = req.user.id; // Get user ID from token
     
-    //if (!userID) {
-    //    return res.status(401).json({ message: "Unauthorized." });
-    //}
-    
-    const userID = 1; // Feste NutzerID für Testzwecke
     const query = "SELECT * FROM liste WHERE NutzerID = ?";
     con.query(query, [userID], function (err, results) {
         if (err) {
@@ -254,8 +245,8 @@ app.get('/api/user-lists', function (req, res) {
     });
 });
 
-// Filme zur Liste hinzufügen
-app.post('/api/list-creator/add-films', function (req, res) {
+// Filme zur Liste hinzufügen (protected route)
+app.post('/api/list-creator/add-films', verifyToken, function (req, res) {
     const { listId, filmIds } = req.body;
 
     if (!listId || !Array.isArray(filmIds)) {
@@ -278,8 +269,8 @@ app.post('/api/list-creator/add-films', function (req, res) {
     });
 });
 
-// Liste löschen
-app.delete('/api/list-creator/delete/:listId', function (req, res) {
+// Liste löschen (protected route)
+app.delete('/api/list-creator/delete/:listId', verifyToken, function (req, res) {
     const listId = req.params.listId;
     const query = "DELETE FROM liste WHERE ListenID = ?";
 
@@ -293,8 +284,8 @@ app.delete('/api/list-creator/delete/:listId', function (req, res) {
     });
 });
 
-// Film aus Liste entfernen
-app.post('/api/list-creator/remove-film', function (req, res) {
+// Film aus Liste entfernen (protected route)
+app.post('/api/list-creator/remove-film', verifyToken, function (req, res) {
     const { listId, filmId } = req.body;
     const query = "DELETE FROM listenfilme WHERE ListenID = ? AND film_id = ?";
 
@@ -307,6 +298,7 @@ app.post('/api/list-creator/remove-film', function (req, res) {
         }
     });
 });
+
 
 // Filme einer Liste abrufen
 app.get('/api/list-creator/list-films/:listId', function (req, res) {
@@ -329,9 +321,6 @@ app.get('/api/list-creator/list-films/:listId', function (req, res) {
     });
 });
 
-
-
-
 // Registration 
 app.post('/api/register', function (req, res) {
     const { username, email, password } = req.body;
@@ -351,32 +340,46 @@ app.post('/api/register', function (req, res) {
 app.post('/api/login', function (req, res) {
     const { username, password } = req.body;
     const query = "SELECT * FROM nutzer WHERE Nutzername = ? AND Passwort = ?";
+
     con.query(query, [username, password], function (err, results) {
         if (err) {
             console.log("Login failed");
             console.error("Error during login:", err);
-            res.status(500).json({ message: "Login failed." });
-        } else if (results.length > 0) {
+            return res.status(500).json({ message: "Login failed." });
+        }
+
+        if (results.length > 0) {
             console.log("Login successful");
-            res.status(200).json({ message: "Login successful." });
+            // User found, generate JWT token
+            const user = results[0];
+            const payload = { id: user.ID, Nutzername: user.Nutzername }; // Make sure to use the correct fields from the database
+            jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
+                if (err) {
+                    console.error("Error generating token:", err);
+                    return res.status(500).json({ message: "Error generating token" });
+                }
+                return res.json({ token }); // Return the token
+            });
         } else {
             console.log("Invalid username or password");
-            res.status(401).json({ message: "Invalid username or password." });
+            return res.status(401).json({ message: "Invalid username or password." });
         }
     });
 });
 
+// Middleware to verify token
+function verifyToken(req, res, next) {
+    const token = req.headers['authorization'];
 
-// // fur tokens
-// app.post('/api/login', (req, res) => {
-//     const { username, password } = req.body;
-//     // Replace this with actual authentication logic
-//     if (username === 'Nutzername' && password === 'Passwort') {
-//       // Return a fake token for demonstration
-//       const token = 'your-jwt-token';
-//       res.json({ token });
-//     } else {
-//       res.status(401).json({ message: 'Invalid credentials' });
-//     }
-//   });
-  
+    if (!token) {
+        return res.status(401).json({ message: 'No token provided.' });
+    }
+
+    jwt.verify(token.split(' ')[1], secretKey, (err, decoded) => { // Handle 'Bearer ' prefix
+        if (err) {
+            return res.status(401).json({ message: 'Failed to authenticate token.' });
+        }
+        req.user = decoded;
+        next();
+    });
+}
