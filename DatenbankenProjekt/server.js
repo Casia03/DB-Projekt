@@ -22,23 +22,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // configuration =================
 app.use(express.static(path.join(__dirname, '/dist/datenbanken-projekt/browser')));
 
+// application -------------------------------------------------------------
+
+
 // listen (start app with node server.js) ======================================
 app.listen(8080, function () {
     console.log("App listening on port 8080");
 });
-
-// application -------------------------------------------------------------
-app.get('/', function (req, res) {
-    //res.send("Hello World123");     
-    res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
-});
-
-app.get('/home-page', function (req, res) {
-    res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
-});
+  
 
 //Ein Film
-app.get('/film/:id', function (req, res) {
+app.get('/api/film/:id', function (req, res) {
     const filmId = req.params.id;
     const filmQuery = `
         SELECT film.*, image.link AS image_link
@@ -79,7 +73,7 @@ app.get('/film/:id', function (req, res) {
 
 
 // Alle Filme
-app.get('/film-list', function (req, res) {
+app.get('/api/film-list', function (req, res) {
     con.query("SELECT film.*, image.link AS image_link FROM film LEFT JOIN image ON film.image_nr = image.image_id", function (err, results) {
         if (err) {
             console.error("Error fetching films:", err);
@@ -413,4 +407,12 @@ app.post('/api/login', function (req, res) {
 //       res.status(401).json({ message: 'Invalid credentials' });
 //     }
 //   });
-  
+
+app.get('/', function (req, res) {
+    //res.send("Hello World123");     
+    res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
+});
+
+app.get('*', function (req, res) {
+    res.sendFile('index.html', { root: path.join(__dirname, 'dist/datenbanken-projekt/browser') });
+});

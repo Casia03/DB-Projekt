@@ -54,7 +54,7 @@ export class FilmListComponent implements OnInit {
     }
 
     getAllFilms() {
-        this.http.get<Film[]>('/film-list').subscribe(
+        this.http.get<Film[]>('/api/film-list').subscribe(
             (data: Film[]) => {
                 this.films = data;
             },

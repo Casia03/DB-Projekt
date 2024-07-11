@@ -30,13 +30,13 @@
     <div class="main-list">
         <div class="main-list-container">
             <div class="list-item">
-                <img [src]="film.image_url" alt="{{ film.title }}">
-                <div class="item-info">
-                    <h3>{{ film.title }}</h3>
+                <img [src]="'../../assets/pictures/' + film?.image_link" alt="{{ film?.title }}">
+                <div class="item-info" *ngIf="film">
+                    <h3>{{ film?.title }}</h3>
                     <div class="film-details item-tags">
-                        <span>Release Year: {{ film.release_year }}</span>
-                        <span>Rating: {{ film.rating }}</span>
-                        <span>Length: {{ film.length }} Minutes</span>
+                        <span>Release Year: {{ film?.release_year }}</span>
+                        <span>Rating: {{ film?.rating }}</span>
+                        <span>Length: {{ film?.length }} Minutes</span>
                     </div>
                     <p>{{ film.description }}</p>
                     <div class="item-tags">

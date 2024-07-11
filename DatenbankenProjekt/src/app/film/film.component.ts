@@ -1,6 +1,6 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-film',
@@ -17,25 +17,40 @@ export class FilmComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadFilm();
+    this.route.paramMap.subscribe(params => {
+      const filmIdParam = params.get('id');
+      if (filmIdParam !== null) {
+        const filmId = +filmIdParam; // Konvertierung der Film-ID in eine Zahl
+        if (!isNaN(filmId)) {
+          this.loadFilm(filmId);
+        } else {
+          console.error('Invalid film ID:', filmIdParam);
+        }
+      } else {
+        console.error('Film ID is null or undefined.');
+      }
+    });
   }
+  
 
-  toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
-  }
-
-  loadFilm() {
-    const filmId = this.route.snapshot.paramMap.get('id');
-
-    this.http.get<any>(`/film/${filmId}`).subscribe(
+  loadFilm(filmId: number) {
+    this.http.get<any>(`/api/film/${filmId}`).subscribe(
       (film: any) => {
-        console.log(film);
-        this.film = film;
-        this.film.image_url = `/assets/pictures/${film.image_link}`;
+        console.log('Loaded film:', film);
+        this.film = {
+          ...film,
+          image_url: `/assets/pictures/${film.image_link}`
+        };
+        console.log('Film object:', this.film);
       },
       (error: HttpErrorResponse) => {
         console.error('Error loading film:', error);
       }
     );
   }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
 }
