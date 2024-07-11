@@ -353,6 +353,7 @@ app.post('/api/login', function (req, res) {
             // User found, generate JWT token
             const user = results[0];
             const payload = { id: user.ID, Nutzername: user.Nutzername }; // Make sure to use the correct fields from the database
+            const secretKey = "bomba";
             jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
                 if (err) {
                     console.error("Error generating token:", err);
