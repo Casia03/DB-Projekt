@@ -10,7 +10,7 @@ const con = mysql.createConnection({
     database: "sakila",
     host: "localhost",
     user: "root",
-    password: "1231"
+    password: "passwort"
 });
 
 // support parsing of application/json type post data
