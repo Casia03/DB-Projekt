@@ -30,7 +30,6 @@ app.use(express.static(path.join(__dirname, '/dist/datenbanken-projekt/browser')
 app.listen(8080, function () {
     console.log("App listening on port 8080");
 });
-  
 
 //Ein Film
 app.get('/api/film/:id', function (req, res) {
@@ -75,7 +74,14 @@ app.get('/api/film/:id', function (req, res) {
 
 // Alle Filme
 app.get('/api/film-list', function (req, res) {
-    con.query("SELECT film.*, image.link AS image_link FROM film LEFT JOIN image ON film.image_nr = image.image_id", function (err, results) {
+    const query = `
+        SELECT film.*, image.link AS image_link 
+        FROM film 
+        LEFT JOIN image ON film.image_nr = image.image_id
+        ORDER BY film.title ASC
+    `;
+
+    con.query(query, function (err, results) {
         if (err) {
             console.error("Error fetching films:", err);
             res.status(500).send("Error fetching films");
@@ -375,6 +381,7 @@ app.get('/api/listen', function (req, res) {
         SELECT liste.*, nutzer.Nutzername
         FROM liste
         JOIN nutzer ON liste.NutzerID = nutzer.NutzerID
+        ORDER BY liste.listname ASC
     `;
 
     con.query(query, function (err, results) {
@@ -382,7 +389,7 @@ app.get('/api/listen', function (req, res) {
             console.error("Error fetching list:", err);
             res.status(500).send("Error fetching list");
         } else {
-            
+
             res.send(results);
         }
     });
@@ -395,14 +402,15 @@ app.get('/api/listeninhalt/:ListenID', function (req, res) {
         INNER JOIN listenfilme ON film.film_id = listenfilme.film_id
         LEFT JOIN image ON film.image_nr = image.image_id
         WHERE listenfilme.ListenID =?
+        ORDER BY film.title ASC
     `;
 
-    con.query(query,[ListenID], function (err, results) {
+    con.query(query, [ListenID], function (err, results) {
         if (err) {
             console.error("Error fetching list:", err);
             res.status(500).send("Error fetching list");
         } else {
-            
+
             res.send(results);
         }
     });
@@ -440,13 +448,15 @@ app.post('/api/login', function (req, res) {
             // User found, generate JWT token
             const user = results[0];
             const payload = { NutzerID: user.NutzerID, Nutzername: user.Nutzername }; // Make sure to use the correct fields from the database
-            
+
             jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
                 if (err) {
                     console.error("Error generating token:", err);
                     return res.status(500).json({ message: "Error generating token" });
                 }
+                console.log({ token });
                 return res.json({ token }); // Return the token
+
             });
         } else {
             console.log("Invalid username or password");
