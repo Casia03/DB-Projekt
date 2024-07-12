@@ -10,8 +10,9 @@
         <nav>
             <ul>
                 <li routerLink="/home-page"><a routerLink="/home-page">Home</a></li>
-                <li routerLink="/film-list"><a routerLink="/film-list">Film Liste</a></li>
+                <li routerLink="/film-list"><a routerLink="/film-list">Alle Filme</a></li>
                 <li class="list-creator"><a>Listen erstellen</a></li>
+                <li routerLink="/list-listen"><a routerLink="/list-listen">Listenbrowser</a></li>
                 <li routerLink="/user"><a routerLink="/user">User</a></li>
                 <li routerLink="/user-login"><a routerLink="/user-login">Registrieren/Einlogen</a></li>
 
@@ -35,10 +36,12 @@
                 <form (ngSubmit)="createList()">
                     <label>Listennamen:</label>
                     <input type="text" [(ngModel)]="listname" name="listname" required>
-                    <button type="submit">Liste erstellen</button>
+                    <div class="list-buttons">
+                        <button type="submit">Liste erstellen</button>
+                    </div>
                 </form>
             </div>
-    
+
             <!-- Bereich zur Anzeige aller Listen (rechts) -->
             <div class="display-lists">
                 <h2>Alle Listen</h2>
@@ -48,14 +51,16 @@
                 <ul *ngIf="listen.length > 0">
                     <li *ngFor="let list of listen">
                         <a (click)="selectList(list)">{{ list.listname }}</a>
-                        <button (click)="editList(list)">Bearbeiten</button>
-                        <button (click)="deleteList(list)">Löschen</button>
+                        <div class="list-buttons">
+                            <button (click)="editList(list)">Bearbeiten</button>
+                            <button (click)="deleteList(list)">Löschen</button>
+                        </div>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-    
+
     <div *ngIf="!showListCreation" class="main-list">
         <div class="main-list-container">
             <div class="main-list-items">
@@ -69,8 +74,11 @@
                     <button *ngIf="film.inCurrentList" (click)="removeFilmFromList(film)">Aus Liste entfernen</button>
                 </div>
             </div>
-            <button (click)="addFilmsToList()">Filme zur Liste hinzufügen</button>
-            <button (click)="toggleView()">Zurück zu Listen</button>
+            <div class="button-group">
+                <button class="add-films-button" (click)="addFilmsToList()">Filme zur Liste hinzufügen</button>
+                <button class="toggle-view-button" (click)="toggleView()">Zurück zu Listen</button>
+            </div>
         </div>
-    </div>    
+    </div>
+
 </div>

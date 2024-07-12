@@ -10,8 +10,9 @@
         <nav>
             <ul>
                 <li routerLink="/home-page"><a routerLink="/home-page">Home</a></li>
-                <li class="film-liste"><a>Film Liste</a></li>
+                <li routerLink="/film-list"><a routerLink="/film-list">Alle Filme</a></li>
                 <li routerLink="/list-creator"><a routerLink="/list-creator">Listen erstellen</a></li>
+                <li class="list-listen"><a>Listenbrowser</a></li>
                 <li routerLink="/user"><a routerLink="/user">User</a></li>
                 <li routerLink="/user-login"><a routerLink="/user-login">Registrieren/Einlogen</a></li>
             </ul>
@@ -29,11 +30,10 @@
     <div class="main-list">
         <div class="main-list-container">
             <div class="main-list-items">
-                <div class="list-item" *ngFor="let film of films">
-                    <img [src]="'../../assets/pictures/' + film.image_link" alt="{{ film.title }}">
+                <div class="list-item" *ngFor="let liste of listen">
                     <div class="item-info">
-                        <h3><a [routerLink]="['/film', film.film_id]">{{ film.title }}</a></h3>
-                        <p>{{film.description}}</p>
+                        <h3><a [routerLink]="['/film-list', liste.ListenID]">{{ liste.listname }}</a></h3>
+                        <p>Nutzer: {{liste.Nutzername}}</p>
                     </div>
                 </div>
             </div>
