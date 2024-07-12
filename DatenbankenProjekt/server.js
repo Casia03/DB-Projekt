@@ -5,6 +5,7 @@ var path = require('path');
 var mysql = require('mysql2');
 var bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken'); // fur tokens damit die user session nicht nach einem einfachen refresh verloren geht, implementiere spaeter
+const secretKey = "bomba";
 
 const con = mysql.createConnection({
     database: "sakila",
@@ -224,8 +225,11 @@ app.post('/api/list-creator/create', verifyToken, function (req, res) {
     });
 });
 
+// Getter von Nutzererstellter Listen (protected blabla)    
 app.get('/api/user-lists', verifyToken, function (req, res) {
-    const userID = req.user.id; // Get user ID from token
+    const userID = req.user.NutzerID; // Get user ID from token payload
+
+    console.log("Fetching user lists for user ID:", userID); // Debug log
 
     const query = "SELECT * FROM liste WHERE NutzerID = ?";
     con.query(query, [userID], function (err, results) {
@@ -233,10 +237,12 @@ app.get('/api/user-lists', verifyToken, function (req, res) {
             console.error("Error fetching user lists:", err);
             res.status(500).json({ message: "Failed to fetch user lists." });
         } else {
+            console.log("User lists fetched successfully:", results); // Debug log
             res.status(200).json(results);
         }
     });
 });
+
 
 
 // Filme zur Liste hinzufügen (protected route)
@@ -434,7 +440,7 @@ app.post('/api/login', function (req, res) {
             // User found, generate JWT token
             const user = results[0];
             const payload = { NutzerID: user.NutzerID, Nutzername: user.Nutzername }; // Make sure to use the correct fields from the database
-            const secretKey = "bomba";
+            
             jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
                 if (err) {
                     console.error("Error generating token:", err);
@@ -455,22 +461,25 @@ function verifyToken(req, res, next) {
     const authHeader = req.headers['authorization'];
 
     if (!authHeader) {
+        console.log("No authorization header");
         return res.status(401).json({ message: 'No token provided.' });
     }
 
     const token = authHeader.split(' ')[1]; // Handle 'Bearer ' prefix
 
     if (!token) {
+        console.log("No token found after Bearer");
         return res.status(401).json({ message: 'No token provided.' });
     }
 
     jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
+            console.log("Failed to verify token:", err);
             return res.status(401).json({ message: 'Failed to authenticate token.' });
         }
+        console.log("Token verified successfully, decoded payload:", decoded);
         req.user = decoded; // Attach decoded payload to request object
         next();
     });
 }
-
 

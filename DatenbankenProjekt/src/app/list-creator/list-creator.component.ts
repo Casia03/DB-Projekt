@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../auth.service';
 
 export class Film {
     film_id: number;
@@ -33,15 +34,15 @@ export class List {
     styleUrls: ['./list-creator.component.css']
 })
 export class ListCreatorComponent implements OnInit {
+    
     isSidebarOpen = false;
     films: Film[] = [];
     listen: List[] = [];
     listname: string = '';
     selectedList: List | null = null;
     showListCreation = true;
-    authService: any;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private authService: AuthService) { }
 
     ngOnInit(): void {
         this.getFilms();
@@ -64,7 +65,10 @@ export class ListCreatorComponent implements OnInit {
     }
 
     getUserLists(): void {
-        this.http.get<List[]>('/api/user-lists').subscribe(
+        const token = this.authService.getToken();
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        
+        this.http.get<List[]>('/api/user-lists', { headers }).subscribe(
             (data: List[]) => {
                 this.listen = data;
             },
@@ -127,15 +131,20 @@ export class ListCreatorComponent implements OnInit {
             console.error("No list selected");
             return;
         }
+        const token = this.authService.getToken();
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
         const selectedFilmIds = this.films.filter(film => film.selected && !film.inCurrentList).map(film => film.film_id);
         const body = { listId: this.selectedList.ListenID, filmIds: selectedFilmIds };
     
         if (this.selectedList.ListenID !== undefined) {
-            this.http.post('/api/list-creator/add-films', body).subscribe(
+            this.http.post('/api/list-creator/add-films', body, { headers }).subscribe(
                 (response: any) => {
                     console.log("Films added to list successfully:", response);
-                    //this.getFilmsInList(this.selectedList.ListenID); // Sicherstellen, dass ListenID definiert ist
+                    if(this.selectedList != null){
+                        this.getFilmsInList(this.selectedList.ListenID); // Refresh the list
+                    }
+                    
                 },
                 (error: HttpErrorResponse) => {
                     this.handleHttpError('Error adding films to list', error);
@@ -149,10 +158,11 @@ export class ListCreatorComponent implements OnInit {
             console.error("No list selected");
             return;
         }
-
+        const token = this.authService.getToken();
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
         const body = { listId: this.selectedList.ListenID, filmId: film.film_id };
 
-        this.http.post('/api/list-creator/remove-film', body).subscribe(
+        this.http.post('/api/list-creator/remove-film', body, { headers }).subscribe(
             (response: any) => {
                 console.log("Film removed from list successfully:", response);
                 film.inCurrentList = false;
@@ -165,8 +175,11 @@ export class ListCreatorComponent implements OnInit {
     }
     
     deleteList(list: List): void {
+        const token = this.authService.getToken();
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
         const url = `/api/list-creator/delete/${list.ListenID}`;
-        this.http.delete(url).subscribe(
+        
+        this.http.delete(url, { headers }).subscribe(
             (response: any) => {
                 console.log("List deleted successfully:", response);
                 this.listen = this.listen.filter(l => l.ListenID !== list.ListenID);
