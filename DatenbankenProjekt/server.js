@@ -11,7 +11,7 @@ const con = mysql.createConnection({
     database: "sakila",
     host: "localhost",
     user: "root",
-    password: "123451"
+    password: "aamijnawssh123"
 });
 
 // support parsing of application/json type post data
@@ -463,6 +463,15 @@ app.post('/api/login', function (req, res) {
             return res.status(401).json({ message: "Invalid username or password." });
         }
     });
+});
+
+app.get('/', function (req, res) {
+    //res.send("Hello World123");     
+    res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
+});
+
+app.get('*', function (req, res) {
+    res.sendFile('index.html', { root: path.join(__dirname, 'dist/datenbanken-projekt/browser') });
 });
 
 // Middleware to verify token
