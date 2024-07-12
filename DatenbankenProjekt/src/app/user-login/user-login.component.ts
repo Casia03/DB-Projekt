@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { DialogComponent } from '../dialog/dialog.component';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-user-login',
@@ -44,7 +45,8 @@ export class UserLoginComponent {
     private router: Router, // Injection von Router für Navigation
     private route: ActivatedRoute, // Injection von ActivatedRoute für aktuelle Routeninformationen
     private authService: AuthService, // Injection von AuthService für Authentifizierungslogik
-    private dialog: MatDialog // Injection von MatDialog für Dialog-Fenster
+    private dialog: MatDialog, // Injection von MatDialog für Dialog-Fenster
+    private userService: UserService, 
   ) {}
 
   // Methode zur Registrierung eines neuen Benutzers

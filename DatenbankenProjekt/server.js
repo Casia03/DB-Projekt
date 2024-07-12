@@ -230,10 +230,9 @@ app.post('/api/list-creator/create', verifyToken, function (req, res) {
     });
 });
 
-// Lade die Listen der Eingeloggte Nutzers (protected route)
 app.get('/api/user-lists', verifyToken, function (req, res) {
     const userID = req.user.id; // Get user ID from token
-    
+
     const query = "SELECT * FROM liste WHERE NutzerID = ?";
     con.query(query, [userID], function (err, results) {
         if (err) {
@@ -245,59 +244,109 @@ app.get('/api/user-lists', verifyToken, function (req, res) {
     });
 });
 
+
 // Filme zur Liste hinzufügen (protected route)
 app.post('/api/list-creator/add-films', verifyToken, function (req, res) {
     const { listId, filmIds } = req.body;
+    const userId = req.user.id; // Get user ID from token
 
     if (!listId || !Array.isArray(filmIds)) {
         console.error("Invalid input data:", { listId, filmIds });
         return res.status(400).json({ message: "Invalid input data." });
     }
 
-    // Konvertiere die filmIds zu SMALLINT, falls erforderlich
-    const values = filmIds.map(filmId => [listId, parseInt(filmId)]);
-
-    const query = "INSERT INTO listenfilme (ListenID, film_id) VALUES ?";
-    con.query(query, [values], function (err, results) {
+    // Check if the user is the creator of the list
+    const checkCreatorQuery = "SELECT * FROM liste WHERE ListenID = ? AND NutzerID = ?";
+    con.query(checkCreatorQuery, [listId, userId], function (err, results) {
         if (err) {
-            console.error("Error adding films to list:", err);
-            res.status(500).json({ message: "Failed to add films to list." });
-        } else {
-            console.log("Films added to list successfully");
-            res.status(200).json({ message: "Films added to list successfully." });
+            console.error("Error verifying list creator:", err);
+            return res.status(500).json({ message: "Failed to verify list creator." });
         }
+
+        if (results.length === 0) {
+            return res.status(403).json({ message: "You do not have permission to edit this list." });
+        }
+
+        // User is the creator, proceed to add films to the list
+        const values = filmIds.map(filmId => [listId, parseInt(filmId)]);
+        const query = "INSERT INTO listenfilme (ListenID, film_id) VALUES ?";
+        con.query(query, [values], function (err, results) {
+            if (err) {
+                console.error("Error adding films to list:", err);
+                return res.status(500).json({ message: "Failed to add films to list." });
+            } else {
+                console.log("Films added to list successfully");
+                return res.status(200).json({ message: "Films added to list successfully." });
+            }
+        });
     });
 });
+
 
 // Liste löschen (protected route)
 app.delete('/api/list-creator/delete/:listId', verifyToken, function (req, res) {
     const listId = req.params.listId;
-    const query = "DELETE FROM liste WHERE ListenID = ?";
+    const userId = req.user.id; // Get user ID from token
 
-    con.query(query, [listId], function (err, results) {
+    // Check if the user is the creator of the list
+    const checkCreatorQuery = "SELECT * FROM liste WHERE ListenID = ? AND NutzerID = ?";
+    con.query(checkCreatorQuery, [listId, userId], function (err, results) {
         if (err) {
-            console.error("Error deleting list:", err);
-            res.status(500).json({ message: "Failed to delete list." });
-        } else {
-            res.status(200).json({ message: "List deleted successfully." });
+            console.error("Error verifying list creator:", err);
+            return res.status(500).json({ message: "Failed to verify list creator." });
         }
+
+        if (results.length === 0) {
+            return res.status(403).json({ message: "You do not have permission to delete this list." });
+        }
+
+        // User is the creator, proceed to delete the list
+        const query = "DELETE FROM liste WHERE ListenID = ?";
+        con.query(query, [listId], function (err, results) {
+            if (err) {
+                console.error("Error deleting list:", err);
+                return res.status(500).json({ message: "Failed to delete list." });
+            } else {
+                return res.status(200).json({ message: "List deleted successfully." });
+            }
+        });
     });
 });
+
 
 // Film aus Liste entfernen (protected route)
 app.post('/api/list-creator/remove-film', verifyToken, function (req, res) {
     const { listId, filmId } = req.body;
-    const query = "DELETE FROM listenfilme WHERE ListenID = ? AND film_id = ?";
+    const userId = req.user.id; // Extract the user ID from the verified token
 
-    con.query(query, [listId, filmId], function (err, results) {
+    // Query to check if the user is the creator of the list
+    const checkCreatorQuery = "SELECT * FROM listen WHERE ListenID = ? AND NutzerID = ?";
+
+    con.query(checkCreatorQuery, [listId, userId], function (err, results) {
         if (err) {
-            console.error("Error removing film from list:", err);
-            res.status(500).json({ message: "Failed to remove film from list." });
-        } else {
-            res.status(200).json({ message: "Film removed from list successfully." });
+            console.error("Error verifying list creator:", err);
+            return res.status(500).json({ message: "Failed to verify list creator." });
         }
+
+        if (results.length === 0) {
+            // User is not the creator of the list
+            return res.status(403).json({ message: "You do not have permission to edit this list." });
+        }
+
+        // User is the creator, proceed to remove the film from the list
+        const removeFilmQuery = "DELETE FROM listenfilme WHERE ListenID = ? AND film_id = ?";
+
+        con.query(removeFilmQuery, [listId, filmId], function (err, results) {
+            if (err) {
+                console.error("Error removing film from list:", err);
+                return res.status(500).json({ message: "Failed to remove film from list." });
+            } else {
+                return res.status(200).json({ message: "Film removed from list successfully." });
+            }
+        });
     });
 });
+
 
 
 // Filme einer Liste abrufen
@@ -352,7 +401,7 @@ app.post('/api/login', function (req, res) {
             console.log("Login successful");
             // User found, generate JWT token
             const user = results[0];
-            const payload = { id: user.ID, Nutzername: user.Nutzername }; // Make sure to use the correct fields from the database
+            const payload = { NutzerID: user.NutzerID, Nutzername: user.Nutzername }; // Make sure to use the correct fields from the database
             const secretKey = "bomba";
             jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
                 if (err) {
@@ -369,18 +418,27 @@ app.post('/api/login', function (req, res) {
 });
 
 // Middleware to verify token
+
 function verifyToken(req, res, next) {
-    const token = req.headers['authorization'];
+    const authHeader = req.headers['authorization'];
+
+    if (!authHeader) {
+        return res.status(401).json({ message: 'No token provided.' });
+    }
+
+    const token = authHeader.split(' ')[1]; // Handle 'Bearer ' prefix
 
     if (!token) {
         return res.status(401).json({ message: 'No token provided.' });
     }
 
-    jwt.verify(token.split(' ')[1], secretKey, (err, decoded) => { // Handle 'Bearer ' prefix
+    jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
             return res.status(401).json({ message: 'Failed to authenticate token.' });
         }
-        req.user = decoded;
+        req.user = decoded; // Attach decoded payload to request object
         next();
     });
 }
+
+
