@@ -11,7 +11,7 @@ const con = mysql.createConnection({
     database: "sakila",
     host: "localhost",
     user: "root",
-    password: "123451"
+    password: "aamijnawssh123"
 });
 
 // support parsing of application/json type post data
@@ -30,7 +30,6 @@ app.use(express.static(path.join(__dirname, '/dist/datenbanken-projekt/browser')
 app.listen(8080, function () {
     console.log("App listening on port 8080");
 });
-  
 
 //Ein Film
 app.get('/api/film/:id', function (req, res) {
@@ -75,9 +74,10 @@ app.get('/api/film/:id', function (req, res) {
 
 app.get('/api/film-list', function (req, res) {
     const query = `
-        SELECT film.*, image.link AS image_link
-        FROM film
+        SELECT film.*, image.link AS image_link 
+        FROM film 
         LEFT JOIN image ON film.image_nr = image.image_id
+        ORDER BY film.title ASC
     `;
 
     con.query(query, function (err, results) {
@@ -380,6 +380,7 @@ app.get('/api/listen', function (req, res) {
         SELECT liste.*, nutzer.Nutzername
         FROM liste
         JOIN nutzer ON liste.NutzerID = nutzer.NutzerID
+        ORDER BY liste.listname ASC
     `;
 
     con.query(query, function (err, results) {
@@ -387,7 +388,7 @@ app.get('/api/listen', function (req, res) {
             console.error("Error fetching list:", err);
             res.status(500).send("Error fetching list");
         } else {
-            
+
             res.send(results);
         }
     });
@@ -400,14 +401,15 @@ app.get('/api/listeninhalt/:ListenID', function (req, res) {
         INNER JOIN listenfilme ON film.film_id = listenfilme.film_id
         LEFT JOIN image ON film.image_nr = image.image_id
         WHERE listenfilme.ListenID =?
+        ORDER BY film.title ASC
     `;
 
-    con.query(query,[ListenID], function (err, results) {
+    con.query(query, [ListenID], function (err, results) {
         if (err) {
             console.error("Error fetching list:", err);
             res.status(500).send("Error fetching list");
         } else {
-            
+
             res.send(results);
         }
     });
@@ -450,13 +452,24 @@ app.post('/api/login', function (req, res) {
                     console.error("Error generating token:", err);
                     return res.status(500).json({ message: "Error generating token" });
                 }
+                console.log({ token });
                 return res.json({ token }); // Return the token
+
             });
         } else {
             console.log("Invalid username or password");
             return res.status(401).json({ message: "Invalid username or password." });
         }
     });
+});
+
+app.get('/', function (req, res) {
+    //res.send("Hello World123");     
+    res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
+});
+
+app.get('*', function (req, res) {
+    res.sendFile('index.html', { root: path.join(__dirname, 'dist/datenbanken-projekt/browser') });
 });
 
 
