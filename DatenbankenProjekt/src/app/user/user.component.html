@@ -31,43 +31,15 @@
         <h1>User Profil</h1>
     </div>
     <div class="haupt-container">
-        
-        
         <button class="logout-button" (click)="logout()">Logout</button>
         <div class="user-card">
             <div class="user-field">
                 <label for="vorname"><strong>Nutzername:</strong></label>
-                <span>{{ user.vorname }}</span>
-            </div>
-            <div class="user-field">
-                <label for="geburtsdatum"><strong>Geburtsdatum:</strong></label>
-                <span>{{ user.geburtsdatum }}</span>
+                <span>{{ user.Nutzername }}</span>
             </div>
             <div class="user-field">
                 <label for="email"><strong>E-Mail:</strong></label>
-                <span>{{ user.email }}</span>
-            </div>
-        </div>
-        <div class="list-section">
-            <h2>Bewertete Filme:</h2>
-            <div class="list-container">
-                <div class="list-item" *ngFor="let item of user.liste1; let i = index">
-                    <input type="text" [(ngModel)]="user.liste1[i]" />
-                </div>
-            </div>
-        </div>
-        <div class="list-section">
-            <h2>Kommentierte Filme:</h2>
-            <div class="list-container">
-                <div class="list-item" *ngFor="let item of user.liste2; let i = index">
-                    <input type="text" [(ngModel)]="user.liste2[i]" />
-                </div>
-            </div>
-        </div>
-        <div class="list-section">
-            <div class="create-list-container">
-                <input type="text" placeholder="Name der Liste" [(ngModel)]="newListName" />
-                <button (click)="createList()">Create List</button>
+                <span>{{ user.Email }}</span>
             </div>
         </div>
     </div>

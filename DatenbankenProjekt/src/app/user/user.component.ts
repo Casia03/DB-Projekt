@@ -1,34 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent {
+export class UserComponent implements OnInit{
   isSidebarOpen = false;
   user = {
-    vorname: 'Max Mustermann',
-    geburtsdatum: '01.01.1990',
-    email: 'max.mustermann@example.com',
-    liste1: ['Film 1', 'Film 2', 'Film 3'],
-    liste2: ['Film A', 'Film B', 'Film C']
+    Nutzername: '',
+    Email: '',
   };
-  newListName: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  logout() {
-    // Implement your logout logic here
-    // For example, clearing user session, tokens, etc.
-    console.log('User logged out');
-    this.router.navigate(['/login']);
+  ngOnInit(): void {
+    this.authService.getUserInfo().subscribe(
+      (data) => {
+        this.user = data;
+      },
+      (error) => {
+        console.error('Error fetching user info:', error);
+      }
+    );
   }
 
-  createList() {
-    // Implement your create list logic here
-    console.log('List created: ', this.newListName);
+  logout(): void {
+    this.authService.logout(); // Clear the token
+    console.log('User logged out');
+    this.router.navigate(['/login']); // Navigate to the login page
+  }
+
+  meineListen() {
+    //navigation to the list-creator-component
   }
 
   toggleSidebar() {

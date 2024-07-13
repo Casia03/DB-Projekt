@@ -54,12 +54,18 @@ export class ListCreatorComponent implements OnInit {
     }
 
     getFilms(): void {
-        this.http.get<Film[]>('/film-list').subscribe(
+        this.http.get<Film[]>('/api/film-list').subscribe(
             (data: Film[]) => {
                 this.films = data;
+                console.log("Films fetched successfully:", data);
             },
             (error: HttpErrorResponse) => {
-                this.handleHttpError('Error fetching all films', error);
+                console.error('Error fetching all films', error);
+                if (error.status === 0) {
+                    console.error('Network error - make sure the backend is running.');
+                } else {
+                    console.error(`Backend returned code ${error.status}, body was: `, error.error);
+                }
             }
         );
     }

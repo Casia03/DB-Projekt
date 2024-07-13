@@ -73,26 +73,31 @@ app.get('/api/film/:id', function (req, res) {
 });
 
 
-// Alle Filme
 app.get('/api/film-list', function (req, res) {
-    con.query("SELECT film.*, image.link AS image_link FROM film LEFT JOIN image ON film.image_nr = image.image_id", function (err, results) {
+    const query = `
+        SELECT film.*, image.link AS image_link
+        FROM film
+        LEFT JOIN image ON film.image_nr = image.image_id
+    `;
+
+    con.query(query, function (err, results) {
         if (err) {
             console.error("Error fetching films:", err);
             res.status(500).send("Error fetching films");
         } else {
             console.log(results);
 
-            // Verarbeitung der Ergebnisse: Erstellen der image_url für jedes Film-Objekt
+            // Processing the results: Creating the image_url for each film object
             results.forEach(film => {
                 if (film.image_link) {
                     film.image_url = `/assets/pictures/${film.image_link}`;
                 } else {
-                    film.image_url = `/assets/pictures/default.jpg`; // Fallback für den Fall, dass kein Bild verfügbar ist
+                    film.image_url = `/assets/pictures/default.jpg`; // Fallback if no image available
                 }
             });
 
-            // Senden der verarbeiteten Ergebnisse an die Angular-Anwendung
-            res.send(results);
+            // Sending the processed results to the Angular application
+            res.status(200).json(results);
         }
     });
 });
@@ -211,7 +216,7 @@ app.get('/api/films/category/:categoryId', function (req, res) {
 // Erstellen von Filmlisten (protected route)
 app.post('/api/list-creator/create', verifyToken, function (req, res) {
     const { listname } = req.body;
-    const userID = req.user.id; // Get user ID from token
+    const userID = req.user.NutzerID; // Get user ID from token
 
     const query = "INSERT INTO liste (listname, NutzerID) VALUES (?, ?)";
     con.query(query, [listname, userID], function (err, results) {
@@ -248,7 +253,7 @@ app.get('/api/user-lists', verifyToken, function (req, res) {
 // Filme zur Liste hinzufügen (protected route)
 app.post('/api/list-creator/add-films', verifyToken, function (req, res) {
     const { listId, filmIds } = req.body;
-    const userId = req.user.id; // Get user ID from token
+    const userId = req.user.NutzerID; // Get user ID from token
 
     if (!listId || !Array.isArray(filmIds)) {
         console.error("Invalid input data:", { listId, filmIds });
@@ -286,7 +291,7 @@ app.post('/api/list-creator/add-films', verifyToken, function (req, res) {
 // Liste löschen (protected route)
 app.delete('/api/list-creator/delete/:listId', verifyToken, function (req, res) {
     const listId = req.params.listId;
-    const userId = req.user.id; // Get user ID from token
+    const userId = req.user.NutzerID; // Get user ID from token
 
     // Check if the user is the creator of the list
     const checkCreatorQuery = "SELECT * FROM liste WHERE ListenID = ? AND NutzerID = ?";
@@ -317,7 +322,7 @@ app.delete('/api/list-creator/delete/:listId', verifyToken, function (req, res) 
 // Film aus Liste entfernen (protected route)
 app.post('/api/list-creator/remove-film', verifyToken, function (req, res) {
     const { listId, filmId } = req.body;
-    const userId = req.user.id; // Extract the user ID from the verified token
+    const userId = req.user.NutzerID; // Extract the user ID from the verified token
 
     // Query to check if the user is the creator of the list
     const checkCreatorQuery = "SELECT * FROM listen WHERE ListenID = ? AND NutzerID = ?";
@@ -423,10 +428,10 @@ app.post('/api/register', function (req, res) {
     });
 });
 
-// Login
+// Login, returns Nutzername Email NutzerID as payload for further website logic.
 app.post('/api/login', function (req, res) {
     const { username, password } = req.body;
-    const query = "SELECT * FROM nutzer WHERE Nutzername = ? AND Passwort = ?";
+    const query = "SELECT NutzerID, Nutzername, Email FROM nutzer WHERE Nutzername = ? AND Passwort = ?";
 
     con.query(query, [username, password], function (err, results) {
         if (err) {
@@ -439,8 +444,7 @@ app.post('/api/login', function (req, res) {
             console.log("Login successful");
             // User found, generate JWT token
             const user = results[0];
-            const payload = { NutzerID: user.NutzerID, Nutzername: user.Nutzername }; // Make sure to use the correct fields from the database
-            
+            const payload = { NutzerID: user.NutzerID, Nutzername: user.Nutzername, Email: user.Email };
             jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
                 if (err) {
                     console.error("Error generating token:", err);
@@ -455,8 +459,24 @@ app.post('/api/login', function (req, res) {
     });
 });
 
-// Middleware to verify token
 
+// Logout rute, token loeschen
+app.post('/api/logout', verifyToken, function (req, res) {
+    const token = req.headers['authorization'].split(' ')[1];
+    tokenBlacklist.push(token); // schwarze liste, nicht sicher ob noetig
+    res.status(200).json({ message: 'Logged out successfully.' });
+});
+
+
+app.get('/api/user-info', verifyToken, (req, res) => {
+    const user = {
+        Nutzername: req.user.Nutzername,
+        Email: req.user.Email, 
+    };
+    res.status(200).json(user);
+});
+
+// Middleware to verify token
 function verifyToken(req, res, next) {
     const authHeader = req.headers['authorization'];
 
