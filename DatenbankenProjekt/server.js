@@ -352,7 +352,7 @@ app.post('/api/list-creator/remove-film', verifyToken, function (req, res) {
     const userId = req.user.NutzerID; // Extract the user ID from the verified token
 
     // Query to check if the user is the creator of the list
-    const checkCreatorQuery = "SELECT * FROM listen WHERE ListenID = ? AND NutzerID = ?";
+    const checkCreatorQuery = "SELECT * FROM liste WHERE ListenID = ? AND NutzerID = ?";
 
     con.query(checkCreatorQuery, [listId, userId], function (err, results) {
         if (err) {
