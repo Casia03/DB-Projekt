@@ -85,12 +85,13 @@ export class UserComponent implements OnInit {
 
   updatePassword(): void {
     this.authService.updatePassword(this.user.Passwort).subscribe(
-      (response) => {
-        console.log('Password updated successfully:', response);
-      },
-      (error) => {
-        console.error('Error updating password:', error);
-      }
+        (response) => {
+            console.log('Password updated successfully:', response.message);
+        },
+        (error) => {
+            console.error('Error updating password:', error);
+        }
     );
-  }
+}
+
 }

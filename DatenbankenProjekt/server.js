@@ -527,19 +527,20 @@ app.post('/api/update-email', verifyToken, (req, res) => {
     });
   });
   
-app.post('/api/update-password', verifyToken, (req, res) => {
+  app.post('/api/update-password', verifyToken, (req, res) => {
     const { Passwort } = req.body;
     const userId = req.user.NutzerID;
 
     con.query('UPDATE nutzer SET Passwort = ? WHERE NutzerID = ?', [Passwort, userId], (error, results) => {
         if (error) {
             console.error('Error updating password:', error);
-            res.status(500).send('Error updating password');
+            res.status(500).json({ message: 'Error updating password' });
         } else {
-            res.status(200).send('Password updated successfully');
+            res.status(200).json({ message: 'Password updated successfully' });
         }
     });
 });
+
 
 // Login, returns Nutzername Email NutzerID as payload for further website logic.
 app.post('/api/login', function (req, res) {

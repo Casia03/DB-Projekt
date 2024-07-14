@@ -109,16 +109,16 @@ export class AuthService implements OnInit {
   
 
   updatePassword(Passwort: string): Observable<any> {
-    // Passwort aktualisieren
     const token = this.getToken();
     if (!token) {
-      return throwError('Kein Token gefunden');
+        return throwError('Kein Token gefunden');
     }
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post('/api/update-password', { Passwort }, { headers }).pipe(
-      catchError(this.handleError)
+    return this.http.post<{ message: string }>('/api/update-password', { Passwort }, { headers }).pipe(
+        catchError(this.handleError)
     );
-  }
+}
+
 
   private handleError(error: any): Observable<never> {
     // Fehlerbehandlung
