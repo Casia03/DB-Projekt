@@ -1,12 +1,9 @@
 <div class="container">
     <div class="sidebar" [ngClass]="{'open': isSidebarOpen}">
-        <!-- Button zum Ausfahren der Sidebar -->
         <button class="sidebar-toggle-arrow" (click)="toggleSidebar()">
             <span></span>
             <span></span>
         </button>
-        
-        <!-- Navigation der Sidebar -->
         <nav>
             <ul>
                 <li routerLink="/home-page"><a routerLink="/home-page">Home</a></li>
@@ -15,9 +12,8 @@
                 <li routerLink="/list-listen"><a routerLink="/list-listen">Listenbrowser</a></li>
                 <li class="user"><a>User</a></li>
                 <li routerLink="/user-login"><a routerLink="/user-login">Registrieren/Einlogen</a></li>
-                
             </ul>
-        </nav>      
+        </nav>
     </div>
 
     <header>
@@ -35,11 +31,20 @@
         <div class="user-card">
             <div class="user-field">
                 <label for="vorname"><strong>Nutzername:</strong></label>
-                <span>{{ user.Nutzername }}</span>
+                <span *ngIf="!isEditingUsername">{{ user.Nutzername }}</span>
+                <input *ngIf="isEditingUsername" [(ngModel)]="user.Nutzername" />
+                <button (click)="toggleEdit('username')">{{ isEditingUsername ? 'Save' : 'Edit' }}</button>
             </div>
             <div class="user-field">
                 <label for="email"><strong>E-Mail:</strong></label>
-                <span>{{ user.Email }}</span>
+                <span *ngIf="!isEditingEmail">{{ user.Email }}</span>
+                <input *ngIf="isEditingEmail" [(ngModel)]="user.Email" />
+                <button (click)="toggleEdit('email')">{{ isEditingEmail ? 'Save' : 'Edit' }}</button>
+            </div>
+            <div class="user-field">
+                <label for="password"><strong>Passwort:</strong></label>
+                <input type="password" [(ngModel)]="user.Passwort" placeholder="Neues Passwort eingeben" />
+                <button (click)="updatePassword()">Ändern</button>
             </div>
         </div>
     </div>
