@@ -11,7 +11,7 @@ const con = mysql.createConnection({
     database: "sakila",
     host: "localhost",
     user: "root",
-    password: "aamijnawssh123"
+    password: "123451"
 });
 
 // support parsing of application/json type post data
@@ -30,6 +30,33 @@ app.use(express.static(path.join(__dirname, '/dist/datenbanken-projekt/browser')
 app.listen(8080, function () {
     console.log("App listening on port 8080");
 });
+
+// Middleware to verify token
+function verifyToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+
+    if (!authHeader) {
+        console.log("No authorization header");
+        return res.status(401).json({ message: 'No token provided.' });
+    }
+
+    const token = authHeader.split(' ')[1]; // Handle 'Bearer ' prefix
+
+    if (!token) {
+        console.log("No token found after Bearer");
+        return res.status(401).json({ message: 'No token provided.' });
+    }
+
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            console.log("Failed to verify token:", err);
+            return res.status(401).json({ message: 'Failed to authenticate token.' });
+        }
+        console.log("Token verified successfully, decoded payload:", decoded);
+        req.user = decoded; // Attach decoded payload to request object
+        next();
+    });
+}
 
 //Ein Film
 app.get('/api/film/:id', function (req, res) {
@@ -430,6 +457,90 @@ app.post('/api/register', function (req, res) {
     });
 });
 
+app.post('/api/update-username', verifyToken, (req, res) => {
+    const { newUsername } = req.body;
+    const userId = req.user.NutzerID;
+
+    // Perform the update in the database
+    const query = 'UPDATE nutzer SET Nutzername = ? WHERE NutzerID = ?';
+    con.query(query, [newUsername, userId], (error, results) => {
+        if (error) {
+            console.error('Error updating username:', error);
+            return res.status(500).json({ message: 'Error updating username' });
+        }
+
+        // Assuming update successful, now re-generate the JWT token
+        const getUserQuery = 'SELECT NutzerID, Nutzername, Email FROM nutzer WHERE NutzerID = ?';
+        con.query(getUserQuery, [userId], (error, results) => {
+            if (error) {
+                console.error('Error retrieving updated user info:', error);
+                return res.status(500).json({ message: 'Error retrieving updated user info' });
+            }
+
+            const user = results[0];
+            const payload = { NutzerID: user.NutzerID, Nutzername: user.Nutzername, Email: user.Email };
+
+            // Generate new token with updated user info
+            jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
+                if (err) {
+                    console.error("Error generating token:", err);
+                    return res.status(500).json({ message: "Error generating token" });
+                }
+                return res.json({ token, user }); // Return the new token and user info
+            });
+        });
+    });
+});
+
+app.post('/api/update-email', verifyToken, (req, res) => {
+    const { newEmail } = req.body;
+    const userId = req.user.NutzerID;
+  
+    // Perform the update in the database
+    const query = 'UPDATE nutzer SET Email = ? WHERE NutzerID = ?';
+    con.query(query, [newEmail, userId], (error, results) => {
+      if (error) {
+        console.error('Error updating email:', error);
+        return res.status(500).json({ message: 'Error updating email' });
+      }
+  
+      // Assuming update successful, now re-generate the JWT token
+      const getUserQuery = 'SELECT NutzerID, Nutzername, Email FROM nutzer WHERE NutzerID = ?';
+      con.query(getUserQuery, [userId], (error, results) => {
+        if (error) {
+          console.error('Error retrieving updated user info:', error);
+          return res.status(500).json({ message: 'Error retrieving updated user info' });
+        }
+  
+        const user = results[0];
+        const payload = { NutzerID: user.NutzerID, Nutzername: user.Nutzername, Email: user.Email };
+  
+        // Generate new token with updated user info
+        jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
+          if (err) {
+            console.error("Error generating token:", err);
+            return res.status(500).json({ message: "Error generating token" });
+          }
+          return res.json({ token, user }); // Return the new token and user info
+        });
+      });
+    });
+  });
+  
+app.post('/api/update-password', verifyToken, (req, res) => {
+    const { Passwort } = req.body;
+    const userId = req.user.NutzerID;
+
+    con.query('UPDATE nutzer SET Passwort = ? WHERE NutzerID = ?', [Passwort, userId], (error, results) => {
+        if (error) {
+            console.error('Error updating password:', error);
+            res.status(500).send('Error updating password');
+        } else {
+            res.status(200).send('Password updated successfully');
+        }
+    });
+});
+
 // Login, returns Nutzername Email NutzerID as payload for further website logic.
 app.post('/api/login', function (req, res) {
     const { username, password } = req.body;
@@ -443,6 +554,7 @@ app.post('/api/login', function (req, res) {
         }
 
         if (results.length > 0) {
+            console.log(results);
             console.log("Login successful");
             // User found, generate JWT token
             const user = results[0];
@@ -452,7 +564,7 @@ app.post('/api/login', function (req, res) {
                     console.error("Error generating token:", err);
                     return res.status(500).json({ message: "Error generating token" });
                 }
-                console.log({ token });
+                //console.log({ token });
                 return res.json({ token }); // Return the token
 
             });
@@ -462,6 +574,9 @@ app.post('/api/login', function (req, res) {
         }
     });
 });
+
+
+
 
 // Logout rute, token loeschen
 app.post('/api/logout', verifyToken, function (req, res) {
@@ -479,6 +594,10 @@ app.get('/api/user-info', verifyToken, (req, res) => {
     res.status(200).json(user);
 });
 
+
+
+
+
 app.get('/', function (req, res) {
     //res.send("Hello World123");     
     res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
@@ -487,31 +606,3 @@ app.get('/', function (req, res) {
 app.get('*', function (req, res) {
     res.sendFile('index.html', { root: path.join(__dirname, 'dist/datenbanken-projekt/browser') });
 });
-
-// Middleware to verify token
-function verifyToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-
-    if (!authHeader) {
-        console.log("No authorization header");
-        return res.status(401).json({ message: 'No token provided.' });
-    }
-
-    const token = authHeader.split(' ')[1]; // Handle 'Bearer ' prefix
-
-    if (!token) {
-        console.log("No token found after Bearer");
-        return res.status(401).json({ message: 'No token provided.' });
-    }
-
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-            console.log("Failed to verify token:", err);
-            return res.status(401).json({ message: 'Failed to authenticate token.' });
-        }
-        console.log("Token verified successfully, decoded payload:", decoded);
-        req.user = decoded; // Attach decoded payload to request object
-        next();
-    });
-}
-

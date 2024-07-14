@@ -47,12 +47,17 @@ export class UserLoginComponent {
     private dialog: MatDialog, // Injection von MatDialog für Dialog-Fenster
   ) {}
 
-  // Methode zur Registrierung eines neuen Benutzers
   onSignUp() {
-    this.http.post('/api/register', this.signupObj) // POST-Anfrage an die Registrierungs-API
+    // Überprüfen, ob alle Felder ausgefüllt sind
+    if (!this.signupObj.username.trim() || !this.signupObj.email.trim() || !this.signupObj.password.trim()) {
+      this.showDialog('Registration Failed', 'Please fill in all fields.');
+      return;
+    }
+  
+    this.http.post('/api/register', this.signupObj)
       .subscribe(response => {
         console.log('Registration successful:', response);
-        this.showDialog('Registration Successful', 'You have registered successfully.'); // Erfolgsdialog anzeigen
+        this.showDialog('Registration Successful', 'You have registered successfully.');
         // Zurücksetzen des Registrierungsobjekts
         this.signupObj = {
           username: '',
@@ -61,9 +66,10 @@ export class UserLoginComponent {
         };
       }, error => {
         console.error('Registration error:', error);
-        this.showDialog('Registration Failed', 'An error occurred during registration.'); // Fehlerdialog anzeigen
+        this.showDialog('Registration Failed', 'An error occurred during registration.');
       });
   }
+  
 
   // Methode zum Einloggen eines Benutzers
  // Method to log in a user
