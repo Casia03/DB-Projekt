@@ -325,7 +325,7 @@ app.post('/api/list-creator/remove-film', verifyToken, function (req, res) {
     const userId = req.user.NutzerID; // Extract the user ID from the verified token
 
     // Query to check if the user is the creator of the list
-    const checkCreatorQuery = "SELECT * FROM listen WHERE ListenID = ? AND NutzerID = ?";
+    const checkCreatorQuery = "SELECT * FROM liste WHERE ListenID = ? AND NutzerID = ?";
 
     con.query(checkCreatorQuery, [listId, userId], function (err, results) {
         if (err) {
@@ -463,16 +463,6 @@ app.post('/api/login', function (req, res) {
     });
 });
 
-app.get('/', function (req, res) {
-    //res.send("Hello World123");     
-    res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
-});
-
-app.get('*', function (req, res) {
-    res.sendFile('index.html', { root: path.join(__dirname, 'dist/datenbanken-projekt/browser') });
-});
-
-
 // Logout rute, token loeschen
 app.post('/api/logout', verifyToken, function (req, res) {
     const token = req.headers['authorization'].split(' ')[1];
@@ -487,6 +477,15 @@ app.get('/api/user-info', verifyToken, (req, res) => {
         Email: req.user.Email, 
     };
     res.status(200).json(user);
+});
+
+app.get('/', function (req, res) {
+    //res.send("Hello World123");     
+    res.sendFile('index.html', { root: __dirname + '/dist/datenbanken-projekt/browser' });
+});
+
+app.get('*', function (req, res) {
+    res.sendFile('index.html', { root: path.join(__dirname, 'dist/datenbanken-projekt/browser') });
 });
 
 // Middleware to verify token
