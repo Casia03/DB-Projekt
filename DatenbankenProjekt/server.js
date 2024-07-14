@@ -442,20 +442,34 @@ app.get('/api/listeninhalt/:ListenID', function (req, res) {
     });
 });
 
-// Registration 
 app.post('/api/register', function (req, res) {
     const { username, email, password } = req.body;
-    const query = "INSERT INTO nutzer (Nutzername, Email, Passwort) VALUES (?, ?, ?)";
-    con.query(query, [username, email, password], function (err, results) {
+    
+    // Überprüfen, ob der Benutzername oder die E-Mail bereits existiert
+    const checkQuery = "SELECT * FROM nutzer WHERE Nutzername = ? OR Email = ?";
+    con.query(checkQuery, [username, email], function (err, results) {
         if (err) {
-            console.error("Error registering user:", err);
-            res.status(500).json({ message: "Registration failed." }); // Rückgabe im JSON-Format
+            console.error("Error checking existing user:", err);
+            res.status(500).json({ message: "Registration failed." });
+        } else if (results.length > 0) {
+            // Ein Benutzer mit demselben Benutzernamen oder derselben E-Mail existiert bereits
+            res.status(400).json({ message: "Benutzername oder E-Mail bereits in Verwendung." });
         } else {
-            console.log("User registered successfully");
-            res.status(200).json({ message: "Registration successful." }); // Rückgabe im JSON-Format
+            // Mit der Registrierung fortfahren
+            const query = "INSERT INTO nutzer (Nutzername, Email, Passwort) VALUES (?, ?, ?)";
+            con.query(query, [username, email, password], function (err, results) {
+                if (err) {
+                    console.error("Error registering user:", err);
+                    res.status(500).json({ message: "Registration failed." });
+                } else {
+                    console.log("User registered successfully");
+                    res.status(200).json({ message: "Registration successful." });
+                }
+            });
         }
     });
 });
+
 
 app.post('/api/update-username', verifyToken, (req, res) => {
     const { newUsername } = req.body;
