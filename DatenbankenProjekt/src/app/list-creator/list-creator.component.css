@@ -152,6 +152,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+
 }
 
 .list-item img {
@@ -164,6 +165,7 @@
 
 .item-info {
     flex-grow: 1;
+    width: 80%;
 }
 
 .item-info h3 {
@@ -174,20 +176,6 @@
 .item-info p {
     margin: 0;
     color: #ccc; /* Leichteres Grau für besseren Kontrast */
-}
-
-/* Zusätzliche Stile für bessere visuelle Trennung */
-.item-tags {
-    margin-top: 5px;
-    font-size: 0.9em;
-    color: #999;
-}
-
-.item-tags span {
-    background: #555;
-    border-radius: 3px;
-    padding: 2px 5px;
-    margin-right: 5px;
 }
 
 .list-buttons{
@@ -217,7 +205,27 @@
     gap: 5px;
 }
 
-.add-films-button, .toggle-view-button {
+.remove-films-button {
+    padding: 10px;
+    height: 40px; 
+    width: 102.5px;
+    display: block; 
+}
+
+.remove-films-button button {
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 100%; 
+    height: 100%; 
+    display: block;
+}
+
+.add-films-button, 
+.toggle-view-button {
     background: #333;
     color: #fff;
     border: none;
@@ -227,6 +235,74 @@
     transition: background-color 0.3s ease;
 }
 
-.add-films-button:hover, .toggle-view-button:hover {
+.remove-films-button button:hover,
+.add-films-button:hover, 
+.toggle-view-button:hover {
     background-color: #555;
+}
+
+/* Verstecke die Standard-Checkbox */
+.list-item input[type="checkbox"] {
+    display: none;
+}
+
+/* Gestalte die benutzerdefinierte Checkbox */
+.list-item input[type="checkbox"] + label {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #333;
+    border-radius: 3px;
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Verstecke die Standard-Checkbox */
+.list-item input[type="checkbox"] {
+    display: none;
+}
+
+/* Gestalte die benutzerdefinierte Checkbox */
+.list-item input[type="checkbox"] + label {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #333;
+    border-radius: 3px;
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+/* Checkbox ist aktiv */
+.list-item input[type="checkbox"]:checked + label {
+    background-color: #333;
+}
+
+/* Haken der benutzerdefinierten Checkbox */
+.list-item input[type="checkbox"]:checked + label::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 6px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Hover-Effekt für Checkboxen */
+.list-item input[type="checkbox"] + label:hover {
+    background-color: #555;
+    border-color: #555;
+}
+
+/* Scroll-Leisten für Webkit-basierte Browser */
+.main-list-container {
+    overflow-y: auto;
+    scrollbar-width: thin; /* Für Firefox */
+    scrollbar-color: #333 #444; /* Für Firefox */
 }
