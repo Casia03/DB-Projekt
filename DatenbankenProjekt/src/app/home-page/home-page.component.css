@@ -278,12 +278,16 @@ main {
 footer {
     position: fixed;
     bottom: 0;
-    width: 95%;
+    width: calc(100% - 80px); 
+    max-width: 1800px;
     text-align: center;
     padding: 20px;
     background: linear-gradient(to bottom, #444, #000000);
     color: #fff;
     border-radius: 5px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
 }
 
 /* Über uns-Stile */
