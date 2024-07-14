@@ -17,7 +17,8 @@ export class UserComponent implements OnInit {
     Passwort: ''
   };
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService,
+                private router: Router) {}
 
   ngOnInit(): void {
     this.loadUserInfo();
@@ -30,21 +31,17 @@ export class UserComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching user info:', error);
-        // Add additional error handling if needed
       }
     );
   }
-
   logout(): void {
     this.authService.logout();
     console.log('User logged out');
     this.router.navigate(['/login']);
   }
-
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
-
   toggleEdit(field: string): void {
     if (field === 'username') {
       this.isEditingUsername = !this.isEditingUsername;
@@ -58,7 +55,6 @@ export class UserComponent implements OnInit {
       }
     }
   }
-
   updateUsername(): void {
     this.authService.updateUsername(this.user.Nutzername).subscribe(
       (response) => {
@@ -70,7 +66,6 @@ export class UserComponent implements OnInit {
       }
     );
   }
-
   updateEmail(): void {
     this.authService.updateEmail(this.user.Email).subscribe(
       (response) => {
@@ -82,7 +77,6 @@ export class UserComponent implements OnInit {
       }
     );
   }
-
   updatePassword(): void {
     this.authService.updatePassword(this.user.Passwort).subscribe(
         (response) => {

@@ -32,7 +32,6 @@ describe('AuthGuard', () => {
   it('should be created', () => {
     expect(guard).toBeTruthy();
   });
-
   // Test, um sicherzustellen, dass der Zugriff erlaubt ist, wenn der Benutzer eingeloggt ist
   it('should allow access when user is logged in', () => {
     (authService.isLoggedIn as jasmine.Spy).and.returnValue(true); // Rückgabewert von isLoggedIn auf true setzen
@@ -41,7 +40,6 @@ describe('AuthGuard', () => {
 
     expect(result).toBeTrue(); // Überprüfen, ob das Ergebnis true ist
   });
-
   // Test, um sicherzustellen, dass der Zugriff verweigert wird und eine Weiterleitung zur Login-Seite erfolgt, wenn der Benutzer nicht eingeloggt ist
   it('should deny access and redirect to login when user is not logged in', () => {
     (authService.isLoggedIn as jasmine.Spy).and.returnValue(false); // Rückgabewert von isLoggedIn auf false setzen

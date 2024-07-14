@@ -28,7 +28,6 @@ export class AuthService implements OnInit {
       );
     }
   }
-
   login(token: string): void {
     // Token im localStorage speichern und Benutzerinformationen abrufen
     localStorage.setItem(this.tokenKey, token);
@@ -41,24 +40,20 @@ export class AuthService implements OnInit {
       }
     );
   }
-
   getToken(): string | null {
     // Token aus localStorage abrufen
     return localStorage.getItem(this.tokenKey);
   }
-
   logout(): void {
     // Token aus localStorage entfernen und Benutzerinformationen löschen
     localStorage.removeItem(this.tokenKey);
     this.user = null;
     this.router.navigate(['/login']); // Zur Login-Seite navigieren
   }
-
   isLoggedIn(): boolean {
     // Prüfen, ob ein gültiges Token vorhanden ist
     return this.getToken() !== null;
   }
-  
   getUserInfo(): Observable<User> {
     // Benutzerinformationen abrufen
     const token = this.getToken();
@@ -71,7 +66,6 @@ export class AuthService implements OnInit {
       catchError(this.handleError)
     );
   }
-
   updateUsername(newUsername: string): Observable<any> {
     const token = this.getToken();
     if (!token) {
@@ -88,7 +82,6 @@ export class AuthService implements OnInit {
       catchError(this.handleError)
     );
   }
-  
   updateEmail(newEmail: string): Observable<any> {
     const token = this.getToken();
     if (!token) {
@@ -105,9 +98,6 @@ export class AuthService implements OnInit {
       catchError(this.handleError)
     );
   }
-  
-  
-
   updatePassword(Passwort: string): Observable<any> {
     const token = this.getToken();
     if (!token) {
@@ -118,14 +108,11 @@ export class AuthService implements OnInit {
         catchError(this.handleError)
     );
 }
-
-
   private handleError(error: any): Observable<never> {
     // Fehlerbehandlung
     console.error('Ein Fehler ist aufgetreten', error);
     return throwError(error);
   }
-
   getUser(): User | null {
     // Aktuelle Benutzerinformationen abrufen
     return this.user;

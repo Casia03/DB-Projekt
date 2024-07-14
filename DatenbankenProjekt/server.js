@@ -540,7 +540,7 @@ app.post('/api/update-email', verifyToken, (req, res) => {
         }
     });
 });
-
+    
 
 // Login, returns Nutzername Email NutzerID as payload for further website logic.
 app.post('/api/login', function (req, res) {
